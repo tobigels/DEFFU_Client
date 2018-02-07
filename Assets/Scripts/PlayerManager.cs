@@ -6,6 +6,7 @@ public class PlayerManager : MonoBehaviour {
     #region FIELDS
 
     private ConnectionManager connectionManager;
+    private AvatarConnector_OUT avatarConnector_OUT;
     private Player localPlayer;
     private Player[] allPlayers;
     private int playerCount;
@@ -24,8 +25,16 @@ public class PlayerManager : MonoBehaviour {
 
         if (gameTurn > 0 && gameTurn < 199) {
 
-            InputFrame inputFrame = new InputFrame();
+            if(avatarConnector_OUT == null) {
+                avatarConnector_OUT = new AvatarConnector_OUT();
+            }
+
+            InputFrame inputFrame = avatarConnector_OUT.getInput();
             inputFrame.gameTurn = gameTurn;
+
+
+            //TODO get INPUT from Main
+
             connectionManager.SendData(inputFrame);
 
         }
@@ -34,6 +43,7 @@ public class PlayerManager : MonoBehaviour {
     private void Awake() {
 
         connectionManager = new ConnectionManager(this);
+        avatarConnector_OUT = null;
         localPlayer = null;
         allPlayers = new Player[connectionManager.MAX_CONNECTIONS];
         playerCount = 0;
