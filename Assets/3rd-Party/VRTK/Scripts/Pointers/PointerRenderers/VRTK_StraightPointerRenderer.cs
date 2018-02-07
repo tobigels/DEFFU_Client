@@ -37,9 +37,9 @@ namespace VRTK
         [Tooltip("A custom game object to use as the appearance for the pointer cursor. If this is empty then a Sphere primitive will be created and used.")]
         public GameObject customCursor;
 
-        protected GameObject actualContainer;
-        protected GameObject actualTracer;
-        protected GameObject actualCursor;
+        public GameObject actualContainer;
+        public GameObject actualTracer;
+        public GameObject actualCursor;
 
         protected Vector3 cursorOriginalScale = Vector3.one;
 
