@@ -12,6 +12,9 @@ public class PlayerManager : MonoBehaviour {
     private Player[] allPlayers;
     private int playerCount;
     private int gameTurn;
+    private float accumulatedTime;
+
+    private const float FRAME_LENGTH = 0.02f;
 
     public static PlayerManager instance = null;
 
@@ -25,16 +28,23 @@ public class PlayerManager : MonoBehaviour {
         connectionManager.CheckForIncomingData();
 
         if (gameTurn > 0 && gameTurn < 199) {
-            foreach(Player player in allPlayers) {
-                if(player.Id != 0) {
-                    if(player.Id == localPlayer.Id) {
-                        CheckLocalAvatar();
-                    } else {
-                        CheckDistantAvatar(player);
-                    }
+
+            accumulatedTime += Time.deltaTime;
+
+            if(accumulatedTime > FRAME_LENGTH) {
+                CheckLocalAvatar();
+
+                accumulatedTime -= FRAME_LENGTH;
+            }
+
+            /*
+            foreach (Player player in allPlayers) {
+                if (player.Id != 0 && player.Id != localPlayer.Id) {
+                    CheckDistantAvatar(player);
                 }
             }
-        }   
+            */
+        } 
     }
 
     private void Awake() {
@@ -46,6 +56,7 @@ public class PlayerManager : MonoBehaviour {
         avatarConnectors_in = new AvatarConnector_IN[connectionManager.MAX_CONNECTIONS];
         playerCount = 0;
         gameTurn = 0;
+        accumulatedTime = 0f;
 
         if (instance == null) {
             instance = this;
@@ -72,13 +83,15 @@ public class PlayerManager : MonoBehaviour {
     /// </summary>
     private void CheckLocalAvatar() {
 
+        /*
         if (avatarConnector_OUT == null) {
             avatarConnector_OUT = new AvatarConnector_OUT();
         }
 
         InputFrame inputFrame = avatarConnector_OUT.getInput();
         inputFrame.gameTurn = gameTurn;
-
+        */
+        InputFrame inputFrame = new InputFrame();
         connectionManager.SendData(inputFrame);
     }
 
@@ -87,13 +100,12 @@ public class PlayerManager : MonoBehaviour {
     /// </summary>
     /// <param name="player"></param>
     private void CheckDistantAvatar(Player player) {
-        AvatarConnector_IN ac_in = avatarConnectors_in[player.Id - 1];
 
-        if(ac_in == null) {
-            ac_in = new AvatarConnector_IN(player.Name);
+        if(avatarConnectors_in[player.Id - 1] == null) {
+            avatarConnectors_in[player.Id - 1] = new AvatarConnector_IN(player.Name);
         }
 
-        ac_in.UpdataAvatarConnector(player.NewestInputFrame);
+        avatarConnectors_in[player.Id - 1].UpdataAvatarConnector(player.NewestInputFrame);
 
 
     }
