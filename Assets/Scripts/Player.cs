@@ -7,13 +7,13 @@ public class Player {
 
     private int id;
     private string name;
-
+    
     [NonSerialized]
     private InputFrame newestInputFrame;
 
     [NonSerialized]
     private bool inputSet;
-
+    
     #endregion
 
     #region METHODS
@@ -65,6 +65,6 @@ public class Player {
             inputSet = value;
         }
     }
-
+    
     #endregion
 }

@@ -33,21 +33,21 @@ internal class AvatarConnector_OUT {
 
         if (headsetTransform != null) {
             inputFrame.hmd_pos = headsetTransform.position;
-            //inputFrame.hmd_rot = headsetTransform.rotation;
+            inputFrame.hmd_rot = headsetTransform.rotation;
         } else {
             headsetTransform = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.Headset);
         }
 
         if (leftControllerTransform != null) {
             inputFrame.controller_left_pos = leftControllerTransform.position;
-            //inputFrame.controller_left_pos = leftControllerTransform.rotation;
+            inputFrame.controller_left_rot = leftControllerTransform.rotation;
         } else {
             leftControllerTransform = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.LeftController);
         }
 
         if (rightControllerTransform != null) {
             inputFrame.controller_right_pos = rightControllerTransform.position;
-            //inputFrame.controller_right_pos = rightControllerTransform.rotation;
+            inputFrame.controller_right_rot = rightControllerTransform.rotation;
         } else {
             rightControllerTransform = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.RightController);
         }

@@ -6,6 +6,7 @@ public class PlayerManager : MonoBehaviour {
     #region FIELDS
 
     private ConnectionManager connectionManager;
+    private AvatarConnector_IN[] avatarConnectors_in;
     private AvatarConnector_OUT avatarConnector_OUT;
     private Player localPlayer;
     private Player[] allPlayers;
@@ -24,20 +25,16 @@ public class PlayerManager : MonoBehaviour {
         connectionManager.CheckForIncomingData();
 
         if (gameTurn > 0 && gameTurn < 199) {
-
-            if(avatarConnector_OUT == null) {
-                avatarConnector_OUT = new AvatarConnector_OUT();
+            foreach(Player player in allPlayers) {
+                if(player.Id != 0) {
+                    if(player.Id == localPlayer.Id) {
+                        CheckLocalAvatar();
+                    } else {
+                        CheckDistantAvatar(player);
+                    }
+                }
             }
-
-            InputFrame inputFrame = avatarConnector_OUT.getInput();
-            inputFrame.gameTurn = gameTurn;
-
-
-            //TODO get INPUT from Main
-
-            connectionManager.SendData(inputFrame);
-
-        }
+        }   
     }
 
     private void Awake() {
@@ -46,6 +43,7 @@ public class PlayerManager : MonoBehaviour {
         avatarConnector_OUT = null;
         localPlayer = null;
         allPlayers = new Player[connectionManager.MAX_CONNECTIONS];
+        avatarConnectors_in = new AvatarConnector_IN[connectionManager.MAX_CONNECTIONS];
         playerCount = 0;
         gameTurn = 0;
 
@@ -67,6 +65,37 @@ public class PlayerManager : MonoBehaviour {
         foreach(Player player in allPlayers) {
             player.InputSet = false;
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    private void CheckLocalAvatar() {
+
+        if (avatarConnector_OUT == null) {
+            avatarConnector_OUT = new AvatarConnector_OUT();
+        }
+
+        InputFrame inputFrame = avatarConnector_OUT.getInput();
+        inputFrame.gameTurn = gameTurn;
+
+        connectionManager.SendData(inputFrame);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="player"></param>
+    private void CheckDistantAvatar(Player player) {
+        AvatarConnector_IN ac_in = avatarConnectors_in[player.Id - 1];
+
+        if(ac_in == null) {
+            ac_in = new AvatarConnector_IN(player.Name);
+        }
+
+        ac_in.UpdataAvatarConnector(player.NewestInputFrame);
+
+
     }
 
     // --------------------------------------- Public methods ---------------------------------------

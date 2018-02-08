@@ -5,9 +5,9 @@ using UnityEngine;
 public class InputFrame {
     public int gameTurn;
     public SerializableVector3 controller_right_pos;
-    public SerializableVector3 controller_right_rot;
+    public SerializableQuaternion controller_right_rot;
     public SerializableVector3 controller_left_pos;
-    public SerializableVector3 controller_left_rot;
+    public SerializableQuaternion controller_left_rot;
     public SerializableVector3 hmd_pos;
-    public SerializableVector3 hmd_rot;
+    public SerializableQuaternion hmd_rot;
 }
