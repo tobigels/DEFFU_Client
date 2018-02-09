@@ -5,9 +5,31 @@ using UnityEngine;
 
 public class SerializationUnit {
 
+    #region FIELDS
+
+    private BinaryFormatter binaryFormatter;
+    private SurrogateSelector ss;
+
+    #endregion
+
+    #region METHODS
+
     // --------------------------------------- Private methods ---------------------------------------
 
     // --------------------------------------- Public methods ---------------------------------------
+
+    public SerializationUnit() {
+        binaryFormatter = new BinaryFormatter();
+        ss = new SurrogateSelector();
+
+        Vector3SerializationSurrogate vectorSS = new Vector3SerializationSurrogate();
+        QuaternionSerializationSurrogate quatSS = new QuaternionSerializationSurrogate();
+
+        ss.AddSurrogate(typeof(Vector3), new StreamingContext(StreamingContextStates.All), vectorSS);
+        ss.AddSurrogate(typeof(Quaternion), new StreamingContext(StreamingContextStates.All), quatSS);
+
+        binaryFormatter.SurrogateSelector = ss;
+    }
 
     /// <summary>
     /// 
@@ -18,7 +40,6 @@ public class SerializationUnit {
         var memoryStream = new MemoryStream();
         byte[] returnValue;
         try {
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
 
             binaryFormatter.Serialize(memoryStream, toSerialize);
             returnValue = memoryStream.ToArray();
@@ -42,7 +63,6 @@ public class SerializationUnit {
         var memoryStream = new MemoryStream(buffer, 0, bufferLength);
         object returnValue;
         try {
-            BinaryFormatter binaryFormatter = new BinaryFormatter();
 
             returnValue = binaryFormatter.Deserialize(memoryStream);
         } catch (SerializationException e) {
@@ -54,4 +74,6 @@ public class SerializationUnit {
 
         return returnValue;
     }
+
+    #endregion
 }
