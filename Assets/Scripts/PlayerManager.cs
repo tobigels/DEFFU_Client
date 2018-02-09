@@ -34,16 +34,13 @@ public class PlayerManager : MonoBehaviour {
             if(accumulatedTime > FRAME_LENGTH) {
                 CheckLocalAvatar();
 
+                foreach (Player player in allPlayers) {
+                    if (player.Id != 0 && player.Id != localPlayer.Id) {
+                        CheckDistantAvatar(player);
+                    }
+                }
                 accumulatedTime -= FRAME_LENGTH;
             }
-
-            /*
-            foreach (Player player in allPlayers) {
-                if (player.Id != 0 && player.Id != localPlayer.Id) {
-                    CheckDistantAvatar(player);
-                }
-            }
-            */
         } 
     }
 
@@ -83,15 +80,14 @@ public class PlayerManager : MonoBehaviour {
     /// </summary>
     private void CheckLocalAvatar() {
 
-        /*
+        
         if (avatarConnector_OUT == null) {
             avatarConnector_OUT = new AvatarConnector_OUT();
         }
 
         InputFrame inputFrame = avatarConnector_OUT.getInput();
         inputFrame.gameTurn = gameTurn;
-        */
-        InputFrame inputFrame = new InputFrame();
+        
         connectionManager.SendData(inputFrame);
     }
 

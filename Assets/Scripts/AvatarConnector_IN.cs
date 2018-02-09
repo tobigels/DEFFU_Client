@@ -4,6 +4,10 @@ public class AvatarConnector_IN {
 
     #region FIELDS
 
+    private GameObject leftController;
+    private GameObject rightController;
+    private GameObject hmd;
+
     #endregion
 
     #region METHODS
@@ -16,12 +20,12 @@ public class AvatarConnector_IN {
 
         //Instantiate Avatar with player
 
-        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        sphere.name = playerName;
+        hmd = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        hmd.name = playerName;
     }
 
     public void UpdataAvatarConnector(InputFrame inputFrame) {
-
+        hmd.transform.position = inputFrame.hmd_pos;
     }
 
     #endregion
