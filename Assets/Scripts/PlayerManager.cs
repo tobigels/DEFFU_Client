@@ -201,8 +201,7 @@ public class PlayerManager : MonoBehaviour {
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="gameTurn"></param>
-    public void GameTurnEvent(int nGameTurn) {
+    public void GameTurnEvent() {
         if(gameTurn == 0) {
             SceneManager.LoadScene("Main");
         }

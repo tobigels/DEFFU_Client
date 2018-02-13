@@ -9,6 +9,8 @@ public class AvatarConnector_IN : MonoBehaviour {
     private GameObject rightController;
     private GameObject hmd;
 
+    private string playerName;
+
     public GameObject _leftController;
     public GameObject _rightController;
     public GameObject _hmd;
@@ -21,9 +23,9 @@ public class AvatarConnector_IN : MonoBehaviour {
 
     // --------------------------------------- Public methods ---------------------------------------
 
-    public AvatarConnector_IN(string playerName) {
+    public AvatarConnector_IN(string givenName) {
 
-        //Instantiate Avatar with player
+        playerName = givenName;
 
         GameObject player = new GameObject();
         player.name = playerName;
@@ -51,6 +53,46 @@ public class AvatarConnector_IN : MonoBehaviour {
 
         leftController.transform.position = inputFrame.controller_left_pos;
         leftController.transform.rotation = inputFrame.controller_left_rot;
+
+        if(inputFrame.Button_push[(int)ButtonType.ButtonOne]) {
+            Debug.Log("Button One pushed by " + playerName);
+        }
+
+        if (inputFrame.Button_push[(int)ButtonType.ButtonTwo]) {
+            Debug.Log("Button Two pushed by " + playerName);
+        }
+
+        if (inputFrame.Button_push[(int)ButtonType.ButtonThree]) {
+            Debug.Log("Button Three pushed by " + playerName);
+        }
+
+        if (inputFrame.Button_push[(int)ButtonType.ButtonFour]) {
+            Debug.Log("Button Four pushed by " + playerName);
+        }
+
+        if (inputFrame.Button_push[(int)ButtonType.PrimaryIndexTrigger]) {
+            Debug.Log("PrimaryIndexTrigger pushed by " + playerName);
+        }
+
+        if (inputFrame.Button_push[(int)ButtonType.PrimaryHandTrigger]) {
+            Debug.Log("PrimaryHandTrigger pushed by " + playerName);
+        }
+
+        if (inputFrame.Button_push[(int)ButtonType.PrimaryThumbstick]) {
+            Debug.Log("PrimaryThumbstick pushed by " + playerName);
+        }
+
+        if (inputFrame.Button_push[(int)ButtonType.SecondaryIndexTrigger]) {
+            Debug.Log("SecondaryIndexTrigger pushed by " + playerName);
+        }
+
+        if (inputFrame.Button_push[(int)ButtonType.SecondaryHandTrigger]) {
+            Debug.Log("SecondaryHandTrigger pushed by " + playerName);
+        }
+
+        if (inputFrame.Button_push[(int)ButtonType.SecondaryThumbstick]) {
+            Debug.Log("SecondaryThumbstick pushed by " + playerName);
+        }
     }
 
     #endregion

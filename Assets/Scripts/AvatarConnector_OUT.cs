@@ -1,6 +1,20 @@
 ﻿using System;
 using UnityEngine;
+using Valve.VR;
 using VRTK;
+
+public enum ButtonType {
+    ButtonOne = 0,
+    ButtonTwo = 1,
+    ButtonThree = 2,
+    ButtonFour = 3,
+    PrimaryIndexTrigger = 4,
+    PrimaryHandTrigger = 5,
+    PrimaryThumbstick = 6,
+    SecondaryIndexTrigger = 7,
+    SecondaryHandTrigger = 8,
+    SecondaryThumbstick = 9
+}
 
 internal class AvatarConnector_OUT {
 
@@ -8,16 +22,14 @@ internal class AvatarConnector_OUT {
 
     private Transform headsetTransform;
 
-    private GameObject leftController;
-    private GameObject rightController;
+    private Transform leftController;
+    private Transform rightController;
 
     private SteamVR_TrackedObject leftController_tracked;
     private SteamVR_TrackedObject rightController_tracked;
 
     private SteamVR_Controller.Device leftController_device;
     private SteamVR_Controller.Device rightController_device;
-
-    private InputFrame previousFrame;
 
     #endregion
 
@@ -29,9 +41,8 @@ internal class AvatarConnector_OUT {
 
     public AvatarConnector_OUT() {
         headsetTransform = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.Headset);
-        leftController = VRTK_DeviceFinder.GetControllerLeftHand();
-        rightController = VRTK_DeviceFinder.GetControllerRightHand();
-        previousFrame = new InputFrame();
+        leftController = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.LeftController);
+        rightController = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.RightController);
     }
 
     /// <summary>
@@ -39,7 +50,9 @@ internal class AvatarConnector_OUT {
     /// </summary>
     /// <returns></returns>
     public InputFrame getInput() {
-        InputFrame inputFrame = new InputFrame(previousFrame);
+
+
+        InputFrame inputFrame = new InputFrame();
 
         if (headsetTransform != null) {
             inputFrame.hmd_pos = headsetTransform.position;
@@ -49,53 +62,58 @@ internal class AvatarConnector_OUT {
         }
 
         if (leftController != null) {
-            inputFrame.controller_left_pos = leftController.transform.position;
-            inputFrame.controller_left_rot = leftController.transform.rotation;
+            inputFrame.controller_left_pos = leftController.position;
+            inputFrame.controller_left_rot = leftController.rotation;
 
-            leftController_tracked = leftController.GetComponent<SteamVR_TrackedObject>();
-            leftController_device = SteamVR_Controller.Input((int)leftController_tracked.index);
+            leftController_tracked = leftController.GetComponentInParent<SteamVR_TrackedObject>();
 
-            //
-            inputFrame.ButtonThree_pushed = leftController_device.GetPress(Valve.VR.EVRButtonId.k_EButton_A);
-            inputFrame.ButtonThree_touched = (inputFrame.ButtonThree_pushed ? true : leftController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_A));
-            inputFrame.ButtonFour_pushed = leftController_device.GetPress(Valve.VR.EVRButtonId.k_EButton_ApplicationMenu);
-            inputFrame.ButtonFour_touched = (inputFrame.ButtonFour_pushed ? true : leftController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_ApplicationMenu));
-            inputFrame.PrimaryIndexTrigger_pushed = leftController_device.GetPress(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
-            inputFrame.PrimaryIndexTrigger_touched = (inputFrame.PrimaryIndexTrigger_pushed ? true : leftController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger));
-            inputFrame.PrimaryHandTrigger_pushed = leftController_device.GetPress(Valve.VR.EVRButtonId.k_EButton_Axis0);
-            inputFrame.PrimaryHandTrigger_touched = (inputFrame.PrimaryHandTrigger_pushed ? true : leftController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_Axis0));
-            inputFrame.PrimaryThumbstick_pushed = leftController_device.GetPress(Valve.VR.EVRButtonId.k_EButton_Axis0);
-            inputFrame.PrimaryThumbstick_touched = (inputFrame.PrimaryThumbstick_pushed ? true : leftController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_Axis0));
-            //
+            if (leftController_tracked != null) {
+                leftController_device = SteamVR_Controller.Input((int)leftController_tracked.index);
 
-            inputFrame.PrimaryThumbstick_directionX = leftController_device.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x;
-            inputFrame.PrimaryThumbstick_directionY = leftController_device.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y;
+                inputFrame.Button_push[(int)ButtonType.ButtonThree] = leftController_device.GetPress(Valve.VR.EVRButtonId.k_EButton_A);
+                inputFrame.Button_touch[(int)ButtonType.ButtonThree] = leftController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_A);
+                inputFrame.Button_push[(int)ButtonType.ButtonFour] = leftController_device.GetPress(Valve.VR.EVRButtonId.k_EButton_ApplicationMenu);
+                inputFrame.Button_touch[(int)ButtonType.ButtonFour] = leftController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_ApplicationMenu);
+                inputFrame.Button_push[(int)ButtonType.PrimaryIndexTrigger] = leftController_device.GetPress(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
+                inputFrame.Button_touch[(int)ButtonType.PrimaryIndexTrigger] = leftController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
+                inputFrame.Button_push[(int)ButtonType.PrimaryHandTrigger] = leftController_device.GetPress(Valve.VR.EVRButtonId.k_EButton_Grip);
+                inputFrame.Button_touch[(int)ButtonType.PrimaryHandTrigger] = leftController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_Grip);
+                inputFrame.Button_push[(int)ButtonType.PrimaryThumbstick] = leftController_device.GetPress(Valve.VR.EVRButtonId.k_EButton_Axis0);
+                inputFrame.Button_touch[(int)ButtonType.PrimaryThumbstick] = leftController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_Axis0);
+
+                inputFrame.PrimaryThumbstick_directionX = leftController_device.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x;
+                inputFrame.PrimaryThumbstick_directionY = leftController_device.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y;
+
+            }
         } else {
-            leftController = VRTK_DeviceFinder.GetControllerLeftHand();
+            leftController = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.LeftController);
         }
 
         if (rightController != null) {
-            inputFrame.controller_right_pos = rightController.transform.position;
-            inputFrame.controller_right_rot = leftController.transform.rotation;
+            inputFrame.controller_right_pos = rightController.position;
+            inputFrame.controller_right_rot = rightController.rotation;
 
-            rightController_tracked = rightController.GetComponent<SteamVR_TrackedObject>();
-            rightController_device = SteamVR_Controller.Input((int)rightController_tracked.index);
+            rightController_tracked = rightController.GetComponentInParent<SteamVR_TrackedObject>();
 
-            inputFrame.ButtonOne_pushed = rightController_device.GetPressDown(Valve.VR.EVRButtonId.k_EButton_A);
-            inputFrame.ButtonOne_touched = (inputFrame.ButtonOne_pushed ? true : rightController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_A));
-            inputFrame.ButtonTwo_pushed = rightController_device.GetPress(Valve.VR.EVRButtonId.k_EButton_ApplicationMenu);
-            inputFrame.ButtonTwo_touched = (inputFrame.ButtonTwo_pushed ? true : rightController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_ApplicationMenu));
-            inputFrame.SecondaryIndexTrigger_pushed = rightController_device.GetPress(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
-            inputFrame.SecondaryIndexTrigger_touched = (inputFrame.SecondaryIndexTrigger_pushed ? true : rightController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger));
-            inputFrame.SecondaryHandTrigger_pushed = rightController_device.GetPress(Valve.VR.EVRButtonId.k_EButton_Axis0);
-            inputFrame.SecondaryHandTrigger_touched = (inputFrame.SecondaryHandTrigger_pushed ? true : rightController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_Axis0));
-            inputFrame.SecondaryThumbstick_pushed = rightController_device.GetPress(Valve.VR.EVRButtonId.k_EButton_Axis0);
-            inputFrame.SecondaryThumbstick_touched = (inputFrame.SecondaryThumbstick_pushed ? true : rightController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_Axis0));
+            if(rightController_tracked != null) {
+                rightController_device = SteamVR_Controller.Input((int)rightController_tracked.index);
 
-            inputFrame.SecondaryThumbstick_directionX = rightController_device.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x;
-            inputFrame.SecondaryThumbstick_directionY = rightController_device.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y;
+                inputFrame.Button_push[(int)ButtonType.ButtonOne] = rightController_device.GetPress(Valve.VR.EVRButtonId.k_EButton_A);
+                inputFrame.Button_touch[(int)ButtonType.ButtonOne] = rightController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_A);
+                inputFrame.Button_push[(int)ButtonType.ButtonTwo] = rightController_device.GetPress(Valve.VR.EVRButtonId.k_EButton_ApplicationMenu);
+                inputFrame.Button_touch[(int)ButtonType.ButtonTwo] = rightController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_ApplicationMenu);
+                inputFrame.Button_push[(int)ButtonType.SecondaryIndexTrigger] = rightController_device.GetPress(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
+                inputFrame.Button_touch[(int)ButtonType.SecondaryIndexTrigger] = rightController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_SteamVR_Trigger);
+                inputFrame.Button_push[(int)ButtonType.SecondaryHandTrigger] = rightController_device.GetPress(Valve.VR.EVRButtonId.k_EButton_Grip);
+                inputFrame.Button_touch[(int)ButtonType.SecondaryHandTrigger] = rightController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_Grip);
+                inputFrame.Button_push[(int)ButtonType.SecondaryThumbstick] = rightController_device.GetPress(Valve.VR.EVRButtonId.k_EButton_Axis0);
+                inputFrame.Button_touch[(int)ButtonType.SecondaryThumbstick] = rightController_device.GetTouch(Valve.VR.EVRButtonId.k_EButton_Axis0);
+
+                inputFrame.SecondaryThumbstick_directionX = rightController_device.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).x;
+                inputFrame.SecondaryThumbstick_directionY = rightController_device.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y;
+            }
         } else {
-            rightController = VRTK_DeviceFinder.GetControllerRightHand();
+            rightController = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.RightController);
         }
 
         return inputFrame;

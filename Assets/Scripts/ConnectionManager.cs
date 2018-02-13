@@ -57,7 +57,7 @@ public class ConnectionManager {
 
         switch (eventType) {
             case DataEventType_Client.DATA:
-                Debug.Log("- " + m.Origin + " - DATA");
+                Debug.Log("- " + m.Origin + " - DATA received");
                 InputFrame input = (InputFrame)serializationUnit.DeserializeHelper(m.Content, m.Content.Length);
                 playerManager.DataEvent(m.Origin, input);
                 break;
@@ -79,8 +79,8 @@ public class ConnectionManager {
 
                 //m.Origin holds gameFrame of server
                 Debug.Log("GAMETURN");
-                playerManager.GameTurnEvent(m.Origin);
                 playerManager.GameTurn = m.Origin;
+                playerManager.GameTurnEvent();
                 break;
         }
     }
@@ -93,11 +93,15 @@ public class ConnectionManager {
     private void SendMessage(Message m, bool reliable) {
         byte error;
         byte[] recBuffer = new byte[1024];
+        int bufferSize = 1024;
+        if(m.Content != null) {
+            Debug.Log("Length of sent Data " + m.Content.Length);
+        }    
 
         recBuffer = serializationUnit.SerializeHelper(m);
 
         if (reliable) {
-            NetworkTransport.Send(hostId, connectionId, reliableChannel, recBuffer, recBuffer.Length, out error);
+            NetworkTransport.Send(hostId, connectionId, reliableChannel, recBuffer, bufferSize, out error);
         } else {
             NetworkTransport.Send(hostId, connectionId, unreliableChannel, recBuffer, recBuffer.Length, out error);
         }
