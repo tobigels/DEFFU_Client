@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AvatarConnector_IN : MonoBehaviour {
+public class AvatarConnector_IN {
 
     #region FIELDS
 
@@ -23,6 +23,16 @@ public class AvatarConnector_IN : MonoBehaviour {
 
     // --------------------------------------- Public methods ---------------------------------------
 
+    public string PlayerName {
+        get {
+            return playerName;
+        }
+        set {
+            playerName = value;
+        }
+
+    }
+
     public AvatarConnector_IN(string givenName) {
 
         playerName = givenName;
@@ -30,15 +40,18 @@ public class AvatarConnector_IN : MonoBehaviour {
         GameObject player = new GameObject();
         player.name = playerName;
 
-        hmd = (GameObject) Instantiate(_hmd);
+        hmd = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        //hmd = (GameObject) Instantiate(_hmd);
         hmd.name = "hmd";
         hmd.transform.parent = player.transform;
 
-        leftController = (GameObject)Instantiate(_leftController);
+        leftController = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        //leftController = (GameObject)Instantiate(_leftController);
         leftController.name = "leftController";
         leftController.transform.parent = player.transform;
 
-        rightController = (GameObject)Instantiate(_rightController);
+        rightController = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        //rightController = (GameObject)Instantiate(_rightController);
         rightController.name = "rightController";
         rightController.transform.parent = player.transform;
 
