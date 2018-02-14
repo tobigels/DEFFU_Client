@@ -21,7 +21,6 @@ internal class AvatarConnector_OUT {
     #region FIELDS
 
     private Transform headsetTransform;
-
     private Transform leftController;
     private Transform rightController;
 

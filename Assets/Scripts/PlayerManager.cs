@@ -18,6 +18,10 @@ public class PlayerManager : MonoBehaviour {
 
     public static PlayerManager instance = null;
 
+    public GameObject avatar_leftController;
+    public GameObject avatar_rightController;
+    public GameObject avatar_hmd;
+
     #endregion
 
     #region METHODS
@@ -27,7 +31,7 @@ public class PlayerManager : MonoBehaviour {
     private void Update() {
         connectionManager.CheckForIncomingData();
 
-        if (gameTurn > 0 && gameTurn < 199) {
+        if (gameTurn > 0) {
 
             accumulatedTime += Time.deltaTime;
 
