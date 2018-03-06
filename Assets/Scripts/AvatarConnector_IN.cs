@@ -93,7 +93,7 @@ public class AvatarConnector_IN {
         lastInput = new InputFrame();
     }
 
-    public void UpdataAvatarConnector(InputFrame inputFrame) {
+    public void UpdateAvatarConnector(InputFrame inputFrame) {
         hmd.transform.position = inputFrame.hmd_pos;
         hmd.transform.rotation = inputFrame.hmd_rot;
 

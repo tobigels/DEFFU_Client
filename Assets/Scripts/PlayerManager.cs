@@ -15,6 +15,7 @@ public class PlayerManager : MonoBehaviour {
     private int gameTurn;
     private int frameNumber;
     private float accumulatedTime;
+    private bool inputFramesSwitch;
 
     private const float FRAME_LENGTH = 0.2f;
 
@@ -33,7 +34,7 @@ public class PlayerManager : MonoBehaviour {
     private void Update() {
         connectionManager.CheckForIncomingData();
 
-        if (gameTurn > 0) {
+        if (gameTurn > 0 && gameTurn < 200) {
             accumulatedTime += Time.deltaTime;
 
             if(accumulatedTime > FRAME_LENGTH) {
@@ -62,6 +63,7 @@ public class PlayerManager : MonoBehaviour {
         gameTurn = 0;
         frameNumber = 0;
         accumulatedTime = 0f;
+        inputFramesSwitch = false;
 
         if (instance == null) {
             instance = this;
@@ -100,8 +102,16 @@ public class PlayerManager : MonoBehaviour {
             avatarConnectors_in[player.Id - 1] = new AvatarConnector_IN(player.Name);
         }
 
-        if(player.LastInputFrames[frameNumber] != null) {
-            avatarConnectors_in[player.Id - 1].UpdataAvatarConnector(player.LastInputFrames[frameNumber]);
+        if(inputFramesSwitch) {
+            if (player.InputFrames_beta[frameNumber] != null) {
+                avatarConnectors_in[player.Id - 1].UpdateAvatarConnector(player.InputFrames_beta[frameNumber]);
+                player.InputFrames_beta[frameNumber] = null;
+            }
+        } else {
+            if (player.InputFrames_alpha[frameNumber] != null) {
+                avatarConnectors_in[player.Id - 1].UpdateAvatarConnector(player.InputFrames_alpha[frameNumber]);
+                player.InputFrames_alpha[frameNumber] = null;
+            }
         }
     }
 
@@ -142,7 +152,12 @@ public class PlayerManager : MonoBehaviour {
     /// <param name="id"></param>
     /// <param name="input"></param>
     public void DataEvent(int id, InputFrame input) {
-        allPlayers[id - 1].NewestInputFrames[input.frameNumber] = input;
+        if(inputFramesSwitch) {
+            allPlayers[id - 1].InputFrames_alpha[input.frameNumber] = input;
+        } else {
+            allPlayers[id - 1].InputFrames_beta[input.frameNumber] = input;
+        }
+        
     }
 
     /// <summary>
@@ -208,15 +223,18 @@ public class PlayerManager : MonoBehaviour {
             SceneManager.LoadScene("Main");
         }
 
-        foreach(Player player in AllPlayers) {
+        inputFramesSwitch = !inputFramesSwitch;
+        frameNumber = 0;
+
+        /*
+        foreach (Player player in AllPlayers) {
             if (player.Id != 0 && player.Id != localPlayer.Id) {
 
-                //Array.Clear(player.LastInputFrames, 0, player.LastInputFrames.Length);
+                Array.Clear(player.LastInputFrames, 0, player.LastInputFrames.Length);
                 player.NewestInputFrames.CopyTo(player.LastInputFrames, 0);
-                //Array.Clear(player.NewestInputFrames, 0, player.NewestInputFrames.Length);
+                Array.Clear(player.NewestInputFrames, 0, player.NewestInputFrames.Length);
             }
-        }
-        frameNumber = 0;
+        }*/
     }
 
     /// <summary>

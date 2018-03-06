@@ -9,8 +9,8 @@ public class Player {
     private string name;
     
     [NonSerialized]
-    private InputFrame[] newestInputFrames;
-    private InputFrame[] lastInputFrames;
+    private InputFrame[] inputFrames_alpha;
+    private InputFrame[] inputFrames_beta;
 
     
     #endregion
@@ -22,15 +22,15 @@ public class Player {
     // --------------------------------------- Public methods ---------------------------------------
 
     public Player() {
-        newestInputFrames = new InputFrame[10];
-        lastInputFrames = new InputFrame[10];
+        inputFrames_alpha = new InputFrame[10];
+        inputFrames_beta = new InputFrame[10];
     }
 
     public Player(int nId, string nName) {
         id = nId;
         name = nName;
-        newestInputFrames = new InputFrame[10];
-        lastInputFrames = new InputFrame[10];
+        inputFrames_alpha = new InputFrame[10];
+        inputFrames_beta = new InputFrame[10];
     }
 
     public int Id {
@@ -51,21 +51,21 @@ public class Player {
         }
     }
 
-    public InputFrame[] NewestInputFrames {
+    public InputFrame[] InputFrames_alpha {
         get {
-            return newestInputFrames;
+            return inputFrames_alpha;
         }
         set {
-            newestInputFrames = value;
+            inputFrames_alpha = value;
         }
     }
 
-    public InputFrame[] LastInputFrames {
+    public InputFrame[] InputFrames_beta {
         get {
-            return lastInputFrames;
+            return inputFrames_beta;
         }
         set {
-            lastInputFrames = value;
+            inputFrames_beta = value;
         }
     }
 
