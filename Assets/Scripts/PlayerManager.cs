@@ -16,7 +16,7 @@ public class PlayerManager : MonoBehaviour {
     private int frameNumber;
     private float accumulatedTime;
 
-    private const float FRAME_LENGTH = 0.02f;
+    private const float FRAME_LENGTH = 0.2f;
 
     public static PlayerManager instance = null;
 
@@ -34,10 +34,10 @@ public class PlayerManager : MonoBehaviour {
         connectionManager.CheckForIncomingData();
 
         if (gameTurn > 0) {
-
             accumulatedTime += Time.deltaTime;
 
             if(accumulatedTime > FRAME_LENGTH) {
+                Debug.Log(frameNumber);
                 CheckLocalAvatar();
 
                 foreach (Player player in allPlayers) {
@@ -100,9 +100,9 @@ public class PlayerManager : MonoBehaviour {
             avatarConnectors_in[player.Id - 1] = new AvatarConnector_IN(player.Name);
         }
 
-        avatarConnectors_in[player.Id - 1].UpdataAvatarConnector(player.LastInputFrames[frameNumber]);
-
-
+        if(player.LastInputFrames[frameNumber] != null) {
+            avatarConnectors_in[player.Id - 1].UpdataAvatarConnector(player.LastInputFrames[frameNumber]);
+        }
     }
 
     // --------------------------------------- Public methods ---------------------------------------
@@ -153,14 +153,18 @@ public class PlayerManager : MonoBehaviour {
     public void AskNameEvent(Player[] players) {
         bool localPlayerIdSet = false;
 
-        allPlayers = players;
-
-        for (int i = 0; i < players.Length; i++) {
-            if (players[i].Id == 0 && !localPlayerIdSet) {
-                players[i] = localPlayer;
-                players[i].Id = i + 1;
-                playerCount = i + 1;
-                localPlayerIdSet = true;
+        for(int i = 0; i < allPlayers.Length; i++) {
+            if(players[i].Id == 0) {
+                if(!localPlayerIdSet) {
+                    allPlayers[i] = localPlayer;
+                    allPlayers[i].Id = i + 1;
+                    playerCount = i + 1;
+                    localPlayerIdSet = true;
+                } else {
+                    allPlayers[i] = new Player(0,""); 
+                }
+            } else {
+                allPlayers[i] = new Player(players[i].Id, players[i].Name);
             }
         }
 
@@ -207,9 +211,9 @@ public class PlayerManager : MonoBehaviour {
         foreach(Player player in AllPlayers) {
             if (player.Id != 0 && player.Id != localPlayer.Id) {
 
-                Array.Clear(player.LastInputFrames, 0, player.LastInputFrames.Length);
-                player.LastInputFrames = player.NewestInputFrames;
-                Array.Clear(player.NewestInputFrames, 0, player.NewestInputFrames.Length);
+                //Array.Clear(player.LastInputFrames, 0, player.LastInputFrames.Length);
+                player.NewestInputFrames.CopyTo(player.LastInputFrames, 0);
+                //Array.Clear(player.NewestInputFrames, 0, player.NewestInputFrames.Length);
             }
         }
         frameNumber = 0;

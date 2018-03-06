@@ -89,6 +89,8 @@ public class AvatarConnector_IN {
         } else {
             Debug.Log("Error: rightController-Prefab is empty");
         }
+
+        lastInput = new InputFrame();
     }
 
     public void UpdataAvatarConnector(InputFrame inputFrame) {

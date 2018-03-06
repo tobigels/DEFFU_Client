@@ -94,9 +94,9 @@ public class ConnectionManager {
         byte error;
         byte[] recBuffer = new byte[1024];
         int bufferSize = 1024;
-        if(m.Content != null) {
+        /*if(m.Content != null) {
             Debug.Log("Length of sent Data " + m.Content.Length);
-        }    
+        } */   
 
         recBuffer = serializationUnit.SerializeHelper(m);
 
