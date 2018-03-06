@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 public class PlayerManager : MonoBehaviour {
 
@@ -12,6 +13,7 @@ public class PlayerManager : MonoBehaviour {
     private Player[] allPlayers;
     private int playerCount;
     private int gameTurn;
+    private int frameNumber;
     private float accumulatedTime;
 
     private const float FRAME_LENGTH = 0.02f;
@@ -44,6 +46,7 @@ public class PlayerManager : MonoBehaviour {
                     }
                 }
                 accumulatedTime -= FRAME_LENGTH;
+                frameNumber++;
             }
         } 
     }
@@ -57,6 +60,7 @@ public class PlayerManager : MonoBehaviour {
         avatarConnectors_in = new AvatarConnector_IN[connectionManager.MAX_CONNECTIONS];
         playerCount = 0;
         gameTurn = 0;
+        frameNumber = 0;
         accumulatedTime = 0f;
 
         if (instance == null) {
@@ -73,15 +77,6 @@ public class PlayerManager : MonoBehaviour {
     /// <summary>
     /// 
     /// </summary>
-    private void ResetAllPlayers() {
-        foreach(Player player in allPlayers) {
-            player.InputSet = false;
-        }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
     private void CheckLocalAvatar() {
 
         
@@ -90,8 +85,8 @@ public class PlayerManager : MonoBehaviour {
         }
 
         InputFrame inputFrame = avatarConnector_OUT.getInput();
-        inputFrame.gameTurn = gameTurn;
-        
+        inputFrame.frameNumber = frameNumber;
+
         connectionManager.SendData(inputFrame);
     }
 
@@ -105,7 +100,7 @@ public class PlayerManager : MonoBehaviour {
             avatarConnectors_in[player.Id - 1] = new AvatarConnector_IN(player.Name);
         }
 
-        avatarConnectors_in[player.Id - 1].UpdataAvatarConnector(player.NewestInputFrame);
+        avatarConnectors_in[player.Id - 1].UpdataAvatarConnector(player.LastInputFrames[frameNumber]);
 
 
     }
@@ -147,8 +142,7 @@ public class PlayerManager : MonoBehaviour {
     /// <param name="id"></param>
     /// <param name="input"></param>
     public void DataEvent(int id, InputFrame input) {
-        allPlayers[id - 1].NewestInputFrame = input;
-        allPlayers[id - 1].InputSet = true;
+        allPlayers[id - 1].NewestInputFrames[input.frameNumber] = input;
     }
 
     /// <summary>
@@ -209,7 +203,16 @@ public class PlayerManager : MonoBehaviour {
         if(gameTurn == 0) {
             SceneManager.LoadScene("Main");
         }
-        ResetAllPlayers();
+
+        foreach(Player player in AllPlayers) {
+            if (player.Id != 0 && player.Id != localPlayer.Id) {
+
+                Array.Clear(player.LastInputFrames, 0, player.LastInputFrames.Length);
+                player.LastInputFrames = player.NewestInputFrames;
+                Array.Clear(player.NewestInputFrames, 0, player.NewestInputFrames.Length);
+            }
+        }
+        frameNumber = 0;
     }
 
     /// <summary>

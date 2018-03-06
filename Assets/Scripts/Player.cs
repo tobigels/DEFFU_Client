@@ -9,10 +9,9 @@ public class Player {
     private string name;
     
     [NonSerialized]
-    private InputFrame newestInputFrame;
+    private InputFrame[] newestInputFrames;
+    private InputFrame[] lastInputFrames;
 
-    [NonSerialized]
-    private bool inputSet;
     
     #endregion
 
@@ -23,11 +22,15 @@ public class Player {
     // --------------------------------------- Public methods ---------------------------------------
 
     public Player() {
+        newestInputFrames = new InputFrame[10];
+        lastInputFrames = new InputFrame[10];
     }
 
     public Player(int nId, string nName) {
         id = nId;
         name = nName;
+        newestInputFrames = new InputFrame[10];
+        lastInputFrames = new InputFrame[10];
     }
 
     public int Id {
@@ -48,23 +51,24 @@ public class Player {
         }
     }
 
-    public InputFrame NewestInputFrame {
+    public InputFrame[] NewestInputFrames {
         get {
-            return newestInputFrame;
+            return newestInputFrames;
         }
         set {
-            newestInputFrame = value;
+            newestInputFrames = value;
         }
     }
 
-    public bool InputSet {
+    public InputFrame[] LastInputFrames {
         get {
-            return inputSet;
+            return lastInputFrames;
         }
         set {
-            inputSet = value;
+            lastInputFrames = value;
         }
     }
-    
+
+
     #endregion
 }

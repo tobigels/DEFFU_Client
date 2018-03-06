@@ -3,7 +3,7 @@ using UnityEngine;
 
 [Serializable]
 public class InputFrame {
-    public int gameTurn;
+    public int frameNumber;
 
     public Vector3 controller_right_pos;
     public Quaternion controller_right_rot;
