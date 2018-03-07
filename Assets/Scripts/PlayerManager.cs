@@ -16,8 +16,10 @@ public class PlayerManager : MonoBehaviour {
     private int frameNumber;
     private float accumulatedTime;
     private bool inputFramesSwitch;
+    private float frame_length;
 
-    private const float FRAME_LENGTH = 0.2f;
+    public int frameCount = 5;
+    public float gameTurn_length = 0.1f;
 
     public static PlayerManager instance = null;
 
@@ -37,7 +39,7 @@ public class PlayerManager : MonoBehaviour {
         if (gameTurn > 0 && gameTurn < 200) {
             accumulatedTime += Time.deltaTime;
 
-            if(accumulatedTime > FRAME_LENGTH) {
+            if(accumulatedTime > frame_length && frameNumber < frameCount) {
                 Debug.Log(frameNumber);
                 CheckLocalAvatar();
 
@@ -46,13 +48,21 @@ public class PlayerManager : MonoBehaviour {
                         CheckDistantAvatar(player);
                     }
                 }
-                accumulatedTime -= FRAME_LENGTH;
+                accumulatedTime -= frame_length;
                 frameNumber++;
             }
         } 
     }
 
     private void Awake() {
+
+        if (instance == null) {
+            instance = this;
+        } else {
+            if (instance != this) {
+                Destroy(this);
+            }
+        }
 
         connectionManager = new ConnectionManager(this);
         avatarConnector_OUT = null;
@@ -64,14 +74,7 @@ public class PlayerManager : MonoBehaviour {
         frameNumber = 0;
         accumulatedTime = 0f;
         inputFramesSwitch = false;
-
-        if (instance == null) {
-            instance = this;
-        } else {
-            if (instance != this) {
-                Destroy(this);
-            }
-        }
+        frame_length = gameTurn_length / frameCount;
 
         DontDestroyOnLoad(gameObject);
     }
@@ -223,6 +226,21 @@ public class PlayerManager : MonoBehaviour {
             SceneManager.LoadScene("Main");
         }
 
+        if(inputFramesSwitch) {
+            foreach (Player player in AllPlayers) {
+                if (player.Id != 0 && player.Id != localPlayer.Id) {
+                    Array.Clear(player.InputFrames_beta, 0, player.InputFrames_beta.Length);
+                }
+            }
+        } else {
+            foreach (Player player in AllPlayers) {
+                if (player.Id != 0 && player.Id != localPlayer.Id) {
+                    Array.Clear(player.InputFrames_alpha, 0, player.InputFrames_alpha.Length);
+                }
+            }
+        }
+        
+
         inputFramesSwitch = !inputFramesSwitch;
         frameNumber = 0;
 
@@ -252,7 +270,7 @@ public class PlayerManager : MonoBehaviour {
     /// 
     /// </summary>
     public void StartGame() {
-        connectionManager.SendGameStart();
+        connectionManager.SendGameStart(gameTurn_length);
     }
 
     #endregion

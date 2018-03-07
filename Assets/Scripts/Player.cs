@@ -22,15 +22,15 @@ public class Player {
     // --------------------------------------- Public methods ---------------------------------------
 
     public Player() {
-        inputFrames_alpha = new InputFrame[10];
-        inputFrames_beta = new InputFrame[10];
+        inputFrames_alpha = new InputFrame[PlayerManager.instance.frameCount];
+        inputFrames_beta = new InputFrame[PlayerManager.instance.frameCount];
     }
 
     public Player(int nId, string nName) {
         id = nId;
         name = nName;
-        inputFrames_alpha = new InputFrame[10];
-        inputFrames_beta = new InputFrame[10];
+        inputFrames_alpha = new InputFrame[PlayerManager.instance.frameCount];
+        inputFrames_beta = new InputFrame[PlayerManager.instance.frameCount];
     }
 
     public int Id {

@@ -204,9 +204,9 @@ public class ConnectionManager {
     /// <summary>
     /// 
     /// </summary>
-    public void SendGameStart() {
+    public void SendGameStart(float gameTurn_length) {
         Message m = new Message();
-        m.Content = null;
+        m.Content = serializationUnit.SerializeHelper(gameTurn_length);
         m.Type = (int)DataEventType_Server.ASKGAMESTART;
         SendMessage(m, true);
     }
