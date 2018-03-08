@@ -4,13 +4,13 @@ using Valve.VR;
 using VRTK;
 
 public enum ButtonType {
-    ButtonOne = 0,
-    ButtonTwo = 1,
-    ButtonThree = 2,
-    ButtonFour = 3,
-    PrimaryIndexTrigger = 4,
-    PrimaryHandTrigger = 5,
-    PrimaryThumbstick = 6,
+    ButtonThree = 0,
+    ButtonFour = 1,
+    PrimaryIndexTrigger = 2,
+    PrimaryHandTrigger = 3,
+    PrimaryThumbstick = 4,
+    ButtonOne = 5,
+    ButtonTwo = 6,
     SecondaryIndexTrigger = 7,
     SecondaryHandTrigger = 8,
     SecondaryThumbstick = 9

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class AvatarConnector_IN {
 
@@ -7,12 +8,16 @@ public class AvatarConnector_IN {
 
     private GameObject leftController;
     private GameObject rightController;
+    private ControllerEventsExtension rightControllerEE;
+    private ControllerEventsExtension leftControllerEE;
     private GameObject hmd;
+
+    private bool[] buttonPushStatus = new bool[10];
+    private bool[] buttonTouchStatus = new bool[10];
 
     private AvatarFactory avatarFactory;
 
     private string playerName;
-    private InputFrame lastInput;
 
     #endregion
 
@@ -20,27 +25,6 @@ public class AvatarConnector_IN {
 
     // --------------------------------------- Private methods ---------------------------------------
 
-    private void Button_Push_Helper(bool buttonStatus, int buttonEventNumber) {
-        if (buttonStatus != lastInput.Button_push[buttonEventNumber]) {
-            Debug.Log("Button " + buttonEventNumber + " touched by " + playerName);
-            if (buttonStatus) {
-                //fire ButtonPushDown
-            } else {
-                //fire ButtonPushUp
-            }
-        }
-    }
-
-    private void Button_Touch_Helper(bool buttonStatus, int buttonEventNumber) {
-        if (buttonStatus != lastInput.Button_touch[buttonEventNumber]) {
-            Debug.Log("Button " + buttonEventNumber + " touched by " + playerName);
-            if (buttonStatus) {
-                //fire ButtonTouchDown
-            } else {
-                //fire ButtonTouchUp
-            }
-        }
-    }
 
     // --------------------------------------- Public methods ---------------------------------------
 
@@ -77,6 +61,9 @@ public class AvatarConnector_IN {
             leftController = avatarFactory.InstantiateObject(PlayerManager.instance.avatar_leftController);
             leftController.name = "leftController";
             leftController.transform.parent = player.transform;
+
+            leftControllerEE = leftController.AddComponent<ControllerEventsExtension>();
+            leftControllerEE.AvatarConnector = this;
         } else {
             Debug.Log("Error: leftController-Prefab is empty");
         }
@@ -86,14 +73,20 @@ public class AvatarConnector_IN {
             rightController = avatarFactory.InstantiateObject(PlayerManager.instance.avatar_rightController);
             rightController.name = "rightController";
             rightController.transform.parent = player.transform;
+
+            rightControllerEE = rightController.AddComponent<ControllerEventsExtension>();
+            rightControllerEE.AvatarConnector = this;
+            
         } else {
             Debug.Log("Error: rightController-Prefab is empty");
         }
-
-        lastInput = new InputFrame();
     }
 
-    public void UpdateAvatarConnector(InputFrame inputFrame) {
+    /// <summary>
+    /// update buttonstatus for each controller in correponding ControllerEventsExtension
+    /// </summary>
+    /// <param name="inputFrame"></param>
+    public void UpdateDistantAvatarMovement(InputFrame inputFrame) {
         hmd.transform.position = inputFrame.hmd_pos;
         hmd.transform.rotation = inputFrame.hmd_rot;
 
@@ -102,30 +95,25 @@ public class AvatarConnector_IN {
 
         leftController.transform.position = inputFrame.controller_left_pos;
         leftController.transform.rotation = inputFrame.controller_left_rot;
+    }
 
-        Button_Push_Helper(inputFrame.Button_push[(int)ButtonType.ButtonOne], (int)ButtonType.ButtonOne);
-        Button_Push_Helper(inputFrame.Button_push[(int)ButtonType.ButtonTwo], (int)ButtonType.ButtonTwo);
-        Button_Push_Helper(inputFrame.Button_push[(int)ButtonType.ButtonThree], (int)ButtonType.ButtonThree);
-        Button_Push_Helper(inputFrame.Button_push[(int)ButtonType.ButtonFour], (int)ButtonType.ButtonFour);
-        Button_Push_Helper(inputFrame.Button_push[(int)ButtonType.PrimaryIndexTrigger], (int)ButtonType.PrimaryIndexTrigger);
-        Button_Push_Helper(inputFrame.Button_push[(int)ButtonType.PrimaryHandTrigger], (int)ButtonType.PrimaryHandTrigger);
-        Button_Push_Helper(inputFrame.Button_push[(int)ButtonType.PrimaryThumbstick], (int)ButtonType.PrimaryThumbstick);
-        Button_Push_Helper(inputFrame.Button_push[(int)ButtonType.SecondaryIndexTrigger], (int)ButtonType.SecondaryIndexTrigger);
-        Button_Push_Helper(inputFrame.Button_push[(int)ButtonType.SecondaryHandTrigger], (int)ButtonType.SecondaryHandTrigger);
-        Button_Push_Helper(inputFrame.Button_push[(int)ButtonType.SecondaryThumbstick], (int)ButtonType.SecondaryThumbstick);
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="inputFrame"></param>
+    public void UpdataDistantAvatarButtonEvents(InputFrame inputFrame) {
 
-        Button_Touch_Helper(inputFrame.Button_touch[(int)ButtonType.ButtonOne], (int)ButtonType.ButtonOne);
-        Button_Touch_Helper(inputFrame.Button_touch[(int)ButtonType.ButtonTwo], (int)ButtonType.ButtonTwo);
-        Button_Touch_Helper(inputFrame.Button_touch[(int)ButtonType.ButtonThree], (int)ButtonType.ButtonThree);
-        Button_Touch_Helper(inputFrame.Button_touch[(int)ButtonType.ButtonFour], (int)ButtonType.ButtonFour);
-        Button_Touch_Helper(inputFrame.Button_touch[(int)ButtonType.PrimaryIndexTrigger], (int)ButtonType.PrimaryIndexTrigger);
-        Button_Touch_Helper(inputFrame.Button_touch[(int)ButtonType.PrimaryHandTrigger], (int)ButtonType.PrimaryHandTrigger);
-        Button_Touch_Helper(inputFrame.Button_touch[(int)ButtonType.PrimaryThumbstick], (int)ButtonType.PrimaryThumbstick);
-        Button_Touch_Helper(inputFrame.Button_touch[(int)ButtonType.SecondaryIndexTrigger], (int)ButtonType.SecondaryIndexTrigger);
-        Button_Touch_Helper(inputFrame.Button_touch[(int)ButtonType.SecondaryHandTrigger], (int)ButtonType.SecondaryHandTrigger);
-        Button_Touch_Helper(inputFrame.Button_touch[(int)ButtonType.SecondaryThumbstick], (int)ButtonType.SecondaryThumbstick);
 
-        lastInput = inputFrame;
+        //Compare with previous inputFrame and set status
+        
+    }
+
+    /// <summary>
+    /// Fire ButtonEvents for each controller in corresponding ControllerEventsExtension
+    /// </summary>
+    public void FireButtonEventsOnGameTurn() {
+        rightControllerEE.FireButtonEvents(buttonPushStatus, buttonTouchStatus, true);
+        leftControllerEE.FireButtonEvents(buttonPushStatus, buttonTouchStatus, true);
     }
 
     #endregion

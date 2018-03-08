@@ -92,6 +92,12 @@ public class PlayerManager : MonoBehaviour {
         InputFrame inputFrame = avatarConnector_OUT.getInput();
         inputFrame.frameNumber = frameNumber;
 
+        if(inputFramesSwitch) {
+            localPlayer.InputFrames_alpha[frameNumber] = inputFrame;
+        } else {
+            localPlayer.InputFrames_beta[frameNumber] = inputFrame;
+        }
+
         connectionManager.SendData(inputFrame);
     }
 
@@ -107,12 +113,14 @@ public class PlayerManager : MonoBehaviour {
 
         if(inputFramesSwitch) {
             if (player.InputFrames_beta[frameNumber] != null) {
-                avatarConnectors_in[player.Id - 1].UpdateAvatarConnector(player.InputFrames_beta[frameNumber]);
+                avatarConnectors_in[player.Id - 1].UpdateDistantAvatarMovement(player.InputFrames_beta[frameNumber]);
+                avatarConnectors_in[player.Id - 1].UpdateDistantAvatarButtonEvents(player.InputFrames_alpha[frameNumber]);
                 player.InputFrames_beta[frameNumber] = null;
             }
         } else {
             if (player.InputFrames_alpha[frameNumber] != null) {
-                avatarConnectors_in[player.Id - 1].UpdateAvatarConnector(player.InputFrames_alpha[frameNumber]);
+                avatarConnectors_in[player.Id - 1].UpdateDistantAvatarMovement(player.InputFrames_alpha[frameNumber]);
+                avatarConnectors_in[player.Id - 1].UpdateDistantAvatarButtonEvents(player.InputFrames_beta[frameNumber]);
                 player.InputFrames_alpha[frameNumber] = null;
             }
         }
@@ -157,10 +165,14 @@ public class PlayerManager : MonoBehaviour {
     public void DataEvent(int id, InputFrame input) {
         if(inputFramesSwitch) {
             allPlayers[id - 1].InputFrames_alpha[input.frameNumber] = input;
+
+            //TODO save changes in buttonevents
         } else {
             allPlayers[id - 1].InputFrames_beta[input.frameNumber] = input;
+
+            //TODO save changes in buttonevents
         }
-        
+
     }
 
     /// <summary>
