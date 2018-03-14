@@ -109,15 +109,19 @@ public class AvatarConnector_IN {
         //set button events, if they haven't been set in this gameturn before
 
         for (int i = 0; i < buttonPushStatus.Length; i++) {
+            Debug.Log(" - in UDAP - ");
             if (!buttonPushSetStatus[i]) {
-                buttonPushStatus[i] = inputFrame.Button_push[0];
+                buttonPushStatus[i] = inputFrame.Button_push[i];
+                if(inputFrame.Button_push[i]) {
+                    Debug.Log("TRUE");
+                }
                 buttonPushSetStatus[i] = true;
             }
         }
 
         for (int i = 0; i < buttonTouchStatus.Length; i++) {
             if (!buttonTouchSetStatus[i]) {
-                buttonTouchStatus[i] = inputFrame.Button_touch[0];
+                buttonTouchStatus[i] = inputFrame.Button_touch[i];
                 buttonTouchSetStatus[i] = true;
             }
         }
@@ -127,6 +131,17 @@ public class AvatarConnector_IN {
     /// Fire ButtonEvents for each controller in corresponding ControllerEventsExtension
     /// </summary>
     public void FireButtonEventsOnGameTurn() {
+        Debug.Log("GAMETURN ButtonEvents: "+
+            buttonPushStatus[0] +
+            buttonPushStatus[1] +
+            buttonPushStatus[2] +
+            buttonPushStatus[3] +
+            buttonPushStatus[4] +
+            buttonPushStatus[5] +
+            buttonPushStatus[6] +
+            buttonPushStatus[7] +
+            buttonPushStatus[8] +
+            buttonPushStatus[9]);
         rightControllerEE.FireButtonEvents(buttonPushStatus, buttonTouchStatus, true);
         leftControllerEE.FireButtonEvents(buttonPushStatus, buttonTouchStatus, true);
 

@@ -40,7 +40,7 @@ public class PlayerManager : MonoBehaviour {
             accumulatedTime += Time.deltaTime;
 
             if(accumulatedTime > frame_length && frameNumber < frameCount) {
-                Debug.Log(frameNumber);
+                //Debug.Log(frameNumber);
                 CheckLocalAvatar();
 
                 foreach (Player player in allPlayers) {
@@ -114,13 +114,13 @@ public class PlayerManager : MonoBehaviour {
         if(inputFramesSwitch) {
             if (player.InputFrames_beta[frameNumber] != null) {
                 avatarConnectors_in[player.Id - 1].UpdateDistantAvatarMovement(player.InputFrames_beta[frameNumber]);
-                avatarConnectors_in[player.Id - 1].UpdateDistantAvatarButtonEvents(player.InputFrames_alpha[frameNumber]);
+                //avatarConnectors_in[player.Id - 1].UpdateDistantAvatarButtonEvents(player.InputFrames_alpha[frameNumber]);
                 player.InputFrames_beta[frameNumber] = null;
             }
         } else {
             if (player.InputFrames_alpha[frameNumber] != null) {
                 avatarConnectors_in[player.Id - 1].UpdateDistantAvatarMovement(player.InputFrames_alpha[frameNumber]);
-                avatarConnectors_in[player.Id - 1].UpdateDistantAvatarButtonEvents(player.InputFrames_beta[frameNumber]);
+                //avatarConnectors_in[player.Id - 1].UpdateDistantAvatarButtonEvents(player.InputFrames_beta[frameNumber]);
                 player.InputFrames_alpha[frameNumber] = null;
             }
         }
@@ -163,14 +163,12 @@ public class PlayerManager : MonoBehaviour {
     /// <param name="id"></param>
     /// <param name="input"></param>
     public void DataEvent(int id, InputFrame input) {
-        if(inputFramesSwitch) {
-            allPlayers[id - 1].InputFrames_alpha[input.frameNumber] = input;
+        avatarConnectors_in[id - 1].UpdateDistantAvatarButtonEvents(input);
 
-            //TODO save changes in buttonevents
+        if (inputFramesSwitch) {
+            allPlayers[id - 1].InputFrames_alpha[input.frameNumber] = input;
         } else {
             allPlayers[id - 1].InputFrames_beta[input.frameNumber] = input;
-
-            //TODO save changes in buttonevents
         }
 
     }

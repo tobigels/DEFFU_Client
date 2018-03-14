@@ -1992,8 +1992,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc5e1f66ca7c0d24e83c049ead1b7ab1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frameCount: 10
-  gameTurn_length: 1
+  frameCount: 5
+  gameTurn_length: 0.1
   avatar_leftController: {fileID: 1222213956002554, guid: 54aa4d022b180744d9c2c55ff512e4d1,
     type: 2}
   avatar_rightController: {fileID: 1833301303733230, guid: 62b46825377899a419f7262682d37bde,
