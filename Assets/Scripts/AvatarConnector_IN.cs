@@ -15,6 +15,9 @@ public class AvatarConnector_IN {
     private bool[] buttonPushStatus = new bool[10];
     private bool[] buttonTouchStatus = new bool[10];
 
+    private bool[] buttonPushSetStatus = new bool[10];
+    private bool[] buttonTouchSetStatus = new bool[10];
+
     private AvatarFactory avatarFactory;
 
     private string playerName;
@@ -103,9 +106,21 @@ public class AvatarConnector_IN {
     /// <param name="inputFrame"></param>
     public void UpdateDistantAvatarButtonEvents(InputFrame inputFrame) {
 
+        //set button events, if they haven't been set in this gameturn before
 
-        //Compare with previous inputFrame and set status
-        
+        for (int i = 0; i < buttonPushStatus.Length; i++) {
+            if (!buttonPushSetStatus[i]) {
+                buttonPushStatus[i] = inputFrame.Button_push[0];
+                buttonPushSetStatus[i] = true;
+            }
+        }
+
+        for (int i = 0; i < buttonTouchStatus.Length; i++) {
+            if (!buttonTouchSetStatus[i]) {
+                buttonTouchStatus[i] = inputFrame.Button_touch[0];
+                buttonTouchSetStatus[i] = true;
+            }
+        }
     }
 
     /// <summary>
@@ -114,6 +129,15 @@ public class AvatarConnector_IN {
     public void FireButtonEventsOnGameTurn() {
         rightControllerEE.FireButtonEvents(buttonPushStatus, buttonTouchStatus, true);
         leftControllerEE.FireButtonEvents(buttonPushStatus, buttonTouchStatus, true);
+
+        //reset boolstatusset, for next gameturn-iteration 
+        for(int i = 0; i < buttonPushSetStatus.Length; i++) {
+            buttonPushSetStatus[i] = false;
+        }
+
+        for (int i = 0; i < buttonTouchSetStatus.Length; i++) {
+            buttonTouchSetStatus[i] = false;
+        }
     }
 
     /// <summary>

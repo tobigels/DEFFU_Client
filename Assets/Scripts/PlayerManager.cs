@@ -240,6 +240,7 @@ public class PlayerManager : MonoBehaviour {
             SceneManager.LoadScene("Main");
         }
 
+        //Reset InputFrame-Buffers
         if(inputFramesSwitch) {
             foreach (Player player in AllPlayers) {
                 if (player.Id != 0 && player.Id != localPlayer.Id) {
@@ -253,7 +254,13 @@ public class PlayerManager : MonoBehaviour {
                 }
             }
         }
-        
+
+        //Fire cummulated ButtonEvents in AvatarConnectors
+        foreach(AvatarConnector_IN ac_in in avatarConnectors_in) {
+            if(ac_in != null) {
+                ac_in.FireButtonEventsOnGameTurn();
+            }
+        }
 
         inputFramesSwitch = !inputFramesSwitch;
         frameNumber = 0;
