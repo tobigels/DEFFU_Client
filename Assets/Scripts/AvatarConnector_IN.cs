@@ -8,9 +8,9 @@ public class AvatarConnector_IN {
 
     private GameObject leftController;
     private GameObject rightController;
+    private GameObject hmd;
     private ControllerEventsExtension rightControllerEE;
     private ControllerEventsExtension leftControllerEE;
-    private GameObject hmd;
 
     private bool[] buttonPushStatus = new bool[10];
     private bool[] buttonTouchStatus = new bool[10];
@@ -101,7 +101,7 @@ public class AvatarConnector_IN {
     /// 
     /// </summary>
     /// <param name="inputFrame"></param>
-    public void UpdataDistantAvatarButtonEvents(InputFrame inputFrame) {
+    public void UpdateDistantAvatarButtonEvents(InputFrame inputFrame) {
 
 
         //Compare with previous inputFrame and set status
@@ -116,6 +116,15 @@ public class AvatarConnector_IN {
         leftControllerEE.FireButtonEvents(buttonPushStatus, buttonTouchStatus, true);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    public void DestroyGameObjects() {
+        avatarFactory.DestroyObject(leftController);
+        avatarFactory.DestroyObject(rightController);
+        avatarFactory.DestroyObject(hmd);
+    }
+
     #endregion
 }
 
@@ -123,6 +132,10 @@ public class AvatarFactory : MonoBehaviour{
 
     public GameObject InstantiateObject(GameObject prefab) {
         return Instantiate(prefab);
+    }
+
+    public void DestroyObject(GameObject go) {
+        Destroy(go);
     }
 
 }

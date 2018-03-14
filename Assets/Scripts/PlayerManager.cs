@@ -227,6 +227,8 @@ public class PlayerManager : MonoBehaviour {
     public void DisconnectEvent(int id) {
         allPlayers[id - 1].Id = 0;
         allPlayers[id - 1].Name = "";
+        avatarConnectors_in[id - 1].DestroyGameObjects();
+        avatarConnectors_in[id - 1] = null;
         playerCount--;
     }
 
