@@ -90,14 +90,15 @@ public class AvatarConnector_IN {
     /// </summary>
     /// <param name="inputFrame"></param>
     public void UpdateDistantAvatarMovement(InputFrame inputFrame) {
+
         hmd.transform.position = inputFrame.hmd_pos;
         hmd.transform.rotation = inputFrame.hmd_rot;
 
         rightController.transform.position = inputFrame.controller_right_pos;
-        rightController.transform.rotation = inputFrame.controller_right_rot;
+        rightController.transform.rotation = inputFrame.controller_right_rot * Quaternion.Euler(39.4f, 0, 0);
 
         leftController.transform.position = inputFrame.controller_left_pos;
-        leftController.transform.rotation = inputFrame.controller_left_rot;
+        leftController.transform.rotation = inputFrame.controller_left_rot * Quaternion.Euler(39.4f, 0, 0);
     }
 
     /// <summary>

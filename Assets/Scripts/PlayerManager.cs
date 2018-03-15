@@ -36,22 +36,20 @@ public class PlayerManager : MonoBehaviour {
     private void Update() {
         connectionManager.CheckForIncomingData();
 
-        if (gameTurn > 0 && gameTurn < 200) {
-            accumulatedTime += Time.deltaTime;
+        accumulatedTime += Time.deltaTime;
 
-            if(accumulatedTime > frame_length && frameNumber < frameCount) {
-                //Debug.Log(frameNumber);
-                CheckLocalAvatar();
+        if(accumulatedTime > frame_length && frameNumber < frameCount) {
+            //Debug.Log(frameNumber);
+            CheckLocalAvatar();
 
-                foreach (Player player in allPlayers) {
-                    if (player.Id != 0 && player.Id != localPlayer.Id) {
-                        CheckDistantAvatar(player);
-                    }
+            foreach (Player player in allPlayers) {
+                if (player.Id != 0 && player.Id != localPlayer.Id) {
+                    CheckDistantAvatar(player);
                 }
-                accumulatedTime -= frame_length;
-                frameNumber++;
             }
-        } 
+            accumulatedTime -= frame_length;
+            frameNumber++;
+        }
     }
 
     private void Awake() {
