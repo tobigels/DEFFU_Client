@@ -40,7 +40,7 @@ public class ControllerEventsExtension : VRTK_ControllerEvents {
             Array.Copy(buttonTouchStatus, 0, buttonTouch, 0, 5);
         }
 
-
+        
         /*
          * 0    =   Button One/Three 
          * 1    =   Button Two/Four
@@ -185,6 +185,10 @@ public class ControllerEventsExtension : VRTK_ControllerEvents {
         Array.Copy(buttonPush, buttonPush_previous, 5);
         Array.Copy(buttonTouch, buttonTouch_previous, 5);
 
+    }
+
+    protected override void Update() {
+        
     }
 
     #endregion

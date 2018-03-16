@@ -258,6 +258,9 @@ public class PlayerManager : MonoBehaviour {
             }
         }
 
+        avatarConnector_OUT.FireButtonEventsOnGameTurn();
+
+
         inputFramesSwitch = !inputFramesSwitch;
         frameNumber = 0;
 

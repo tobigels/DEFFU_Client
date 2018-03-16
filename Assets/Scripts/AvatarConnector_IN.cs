@@ -132,17 +132,6 @@ public class AvatarConnector_IN {
     /// Fire ButtonEvents for each controller in corresponding ControllerEventsExtension
     /// </summary>
     public void FireButtonEventsOnGameTurn() {
-        Debug.Log("GAMETURN ButtonEvents: "+
-            buttonPushStatus[0] +
-            buttonPushStatus[1] +
-            buttonPushStatus[2] +
-            buttonPushStatus[3] +
-            buttonPushStatus[4] +
-            buttonPushStatus[5] +
-            buttonPushStatus[6] +
-            buttonPushStatus[7] +
-            buttonPushStatus[8] +
-            buttonPushStatus[9]);
         rightControllerEE.FireButtonEvents(buttonPushStatus, buttonTouchStatus, true);
         leftControllerEE.FireButtonEvents(buttonPushStatus, buttonTouchStatus, true);
 
