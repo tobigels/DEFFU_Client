@@ -3,28 +3,13 @@ using UnityEngine;
 using Valve.VR;
 using VRTK;
 
-public enum ButtonType {
-    ButtonThree = 0,
-    ButtonFour = 1,
-    PrimaryIndexTrigger = 2,
-    PrimaryHandTrigger = 3,
-    PrimaryThumbstick = 4,
-    ButtonOne = 5,
-    ButtonTwo = 6,
-    SecondaryIndexTrigger = 7,
-    SecondaryHandTrigger = 8,
-    SecondaryThumbstick = 9
-}
-
-internal class AvatarConnector_OUT {
+public class AvatarConnector_OUT : AvatarConnector {
 
     #region FIELDS
 
     private Transform headsetTransform;
     private Transform leftController;
     private Transform rightController;
-    private ControllerEventsExtension rightControllerEE;
-    private ControllerEventsExtension leftControllerEE;
 
     private SteamVR_TrackedObject leftController_tracked;
     private SteamVR_TrackedObject rightController_tracked;
@@ -34,26 +19,38 @@ internal class AvatarConnector_OUT {
 
     private InputFrame newestInputFrame;
 
-    private bool[] buttonPushStatus = new bool[10];
-    private bool[] buttonTouchStatus = new bool[10];
-
-    private bool[] buttonPushSetStatus = new bool[10];
-    private bool[] buttonTouchSetStatus = new bool[10];
-
     #endregion
 
     #region METHODS
 
     // --------------------------------------- Private methods ---------------------------------------
 
+    private void CheckLeft() {
+        leftController = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.LeftController);
+
+        if(leftController.gameObject.GetComponent<VRTK_ControllerEvents>()) {
+            UnityEngine.Object.DestroyObject(leftController.gameObject.GetComponent<VRTK_ControllerEvents>());
+        }
+
+        leftControllerEE = leftController.gameObject.AddComponent<ControllerEventsExtension>();
+    }
+
+    private void CheckRight() {
+        rightController = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.RightController);
+
+        if (rightController.gameObject.GetComponent<VRTK_ControllerEvents>()) {
+            UnityEngine.Object.DestroyObject(rightController.gameObject.GetComponent<VRTK_ControllerEvents>());
+        }
+
+        rightControllerEE = rightController.gameObject.AddComponent<ControllerEventsExtension>();
+    }
+
     // --------------------------------------- Public methods ---------------------------------------
 
     public AvatarConnector_OUT() {
         headsetTransform = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.Headset);
-        leftController = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.LeftController);
-        rightController = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.RightController);
-        leftControllerEE = leftController.gameObject.AddComponent<ControllerEventsExtension>();
-        rightControllerEE = rightController.gameObject.AddComponent<ControllerEventsExtension>();
+        CheckLeft();
+        CheckRight();
 
         newestInputFrame = new InputFrame();
     }
@@ -97,8 +94,7 @@ internal class AvatarConnector_OUT {
 
             }
         } else {
-            leftController = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.LeftController);
-            leftControllerEE = leftController.gameObject.AddComponent<ControllerEventsExtension>();
+            CheckLeft();
         }
 
         if (rightController != null) {
@@ -125,47 +121,11 @@ internal class AvatarConnector_OUT {
                 newestInputFrame.SecondaryThumbstick_directionY = rightController_device.GetAxis(Valve.VR.EVRButtonId.k_EButton_Axis0).y;
             }
         } else {
-            rightController = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.RightController);
-            rightControllerEE = rightController.gameObject.AddComponent<ControllerEventsExtension>();
+            CheckRight();
         }
 
-        for (int i = 0; i < buttonPushStatus.Length; i++) {
-            if (!buttonPushSetStatus[i]) {
-                buttonPushStatus[i] = newestInputFrame.Button_push[i];
-                buttonPushSetStatus[i] = true;
-            }
-        }
-
-        for (int i = 0; i < buttonTouchStatus.Length; i++) {
-            if (!buttonTouchSetStatus[i]) {
-                buttonTouchStatus[i] = newestInputFrame.Button_touch[i];
-                buttonTouchSetStatus[i] = true;
-            }
-        }
-
+        UpdateDistantAvatarButtonEvents(newestInputFrame);
         return newestInputFrame;
-    }
-
-    /// <summary>
-    /// Fire ButtonEvents for each controller in corresponding ControllerEventsExtension
-    /// </summary>
-    public void FireButtonEventsOnGameTurn() {
-        if(rightControllerEE != null) {
-            rightControllerEE.FireButtonEvents(buttonPushStatus, buttonTouchStatus, true);
-        }
-        
-        if(leftControllerEE != null) {
-            leftControllerEE.FireButtonEvents(buttonPushStatus, buttonTouchStatus, true);
-        }   
-
-        for (int i = 0; i < buttonPushSetStatus.Length; i++) {
-            buttonPushSetStatus[i] = false;
-        }
-
-        for (int i = 0; i < buttonTouchSetStatus.Length; i++) {
-            buttonTouchSetStatus[i] = false;
-        }
-
     }
 
     #endregion

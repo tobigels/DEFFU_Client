@@ -2,21 +2,13 @@
 using System.Collections;
 using System;
 
-public class AvatarConnector_IN {
+public class AvatarConnector_IN : AvatarConnector {
 
     #region FIELDS
 
     private GameObject leftController;
     private GameObject rightController;
     private GameObject hmd;
-    private ControllerEventsExtension rightControllerEE;
-    private ControllerEventsExtension leftControllerEE;
-
-    private bool[] buttonPushStatus = new bool[10];
-    private bool[] buttonTouchStatus = new bool[10];
-
-    private bool[] buttonPushSetStatus = new bool[10];
-    private bool[] buttonTouchSetStatus = new bool[10];
 
     private AvatarFactory avatarFactory;
 
@@ -104,50 +96,6 @@ public class AvatarConnector_IN {
     /// <summary>
     /// 
     /// </summary>
-    /// <param name="inputFrame"></param>
-    public void UpdateDistantAvatarButtonEvents(InputFrame inputFrame) {
-
-        //set button events, if they haven't been set in this gameturn before
-
-        for (int i = 0; i < buttonPushStatus.Length; i++) {
-            Debug.Log(" - in UDAP - ");
-            if (!buttonPushSetStatus[i]) {
-                buttonPushStatus[i] = inputFrame.Button_push[i];
-                if(inputFrame.Button_push[i]) {
-                    Debug.Log("TRUE");
-                }
-                buttonPushSetStatus[i] = true;
-            }
-        }
-
-        for (int i = 0; i < buttonTouchStatus.Length; i++) {
-            if (!buttonTouchSetStatus[i]) {
-                buttonTouchStatus[i] = inputFrame.Button_touch[i];
-                buttonTouchSetStatus[i] = true;
-            }
-        }
-    }
-
-    /// <summary>
-    /// Fire ButtonEvents for each controller in corresponding ControllerEventsExtension
-    /// </summary>
-    public void FireButtonEventsOnGameTurn() {
-        rightControllerEE.FireButtonEvents(buttonPushStatus, buttonTouchStatus, true);
-        leftControllerEE.FireButtonEvents(buttonPushStatus, buttonTouchStatus, true);
-
-        //reset boolstatusset, for next gameturn-iteration 
-        for(int i = 0; i < buttonPushSetStatus.Length; i++) {
-            buttonPushSetStatus[i] = false;
-        }
-
-        for (int i = 0; i < buttonTouchSetStatus.Length; i++) {
-            buttonTouchSetStatus[i] = false;
-        }
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
     public void DestroyGameObjects() {
         avatarFactory.DestroyObject(leftController);
         avatarFactory.DestroyObject(rightController);
@@ -157,14 +105,3 @@ public class AvatarConnector_IN {
     #endregion
 }
 
-public class AvatarFactory : MonoBehaviour{
-
-    public GameObject InstantiateObject(GameObject prefab) {
-        return Instantiate(prefab);
-    }
-
-    public void DestroyObject(GameObject go) {
-        Destroy(go);
-    }
-
-}
