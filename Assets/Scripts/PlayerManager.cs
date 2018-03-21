@@ -27,6 +27,8 @@ public class PlayerManager : MonoBehaviour {
     public GameObject avatar_rightController;
     public GameObject avatar_hmd;
 
+    public float globalTime = 0.0f;
+
     #endregion
 
     #region METHODS
@@ -34,21 +36,24 @@ public class PlayerManager : MonoBehaviour {
     // --------------------------------------- Private methods ---------------------------------------
 
     private void Update() {
-        connectionManager.CheckForIncomingData();
+        if (globalTime < 60.0f) {
+            connectionManager.CheckForIncomingData();
 
-        accumulatedTime += Time.deltaTime;
+            accumulatedTime += Time.deltaTime;
+            globalTime += Time.deltaTime;
 
-        if(accumulatedTime > frame_length && frameNumber < frameCount) {
-            //Debug.Log(frameNumber);
-            CheckLocalAvatar();
+            if (accumulatedTime > frame_length && frameNumber < frameCount) {
+                //Debug.Log(frameNumber);
+                CheckLocalAvatar();
 
-            foreach (Player player in allPlayers) {
-                if (player.Id != 0 && player.Id != localPlayer.Id) {
-                    CheckDistantAvatar(player);
+                foreach (Player player in allPlayers) {
+                    if (player.Id != 0 && player.Id != localPlayer.Id) {
+                        CheckDistantAvatar(player);
+                    }
                 }
+                accumulatedTime -= frame_length;
+                frameNumber++;
             }
-            accumulatedTime -= frame_length;
-            frameNumber++;
         }
     }
 

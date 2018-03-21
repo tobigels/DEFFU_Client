@@ -53,12 +53,12 @@ public class ControllerEventsExtension : VRTK_ControllerEvents {
         if (buttonPush[0] != buttonPush_previous[0]) {
             if(buttonPush[0]) {
                 //ButtonOne Pressed
-                Debug.Log("Button One pressed");
+                Debug.Log("Button One pressed" + PlayerManager.instance.globalTime);
                 OnButtonOnePressed(SetControllerEvent(ref buttonOnePressed, true, 1f));
                 EmitAlias(ButtonAlias.ButtonOnePress, true, 1f, ref buttonOnePressed);
             } else {
                 //ButtonOne Released
-                Debug.Log("Button One released");
+                Debug.Log("Button One released" + PlayerManager.instance.globalTime);
                 OnButtonOneReleased(SetControllerEvent(ref buttonOnePressed, false, 0f));
                 EmitAlias(ButtonAlias.ButtonOnePress, false, 0f, ref buttonOnePressed);
             }
@@ -67,12 +67,12 @@ public class ControllerEventsExtension : VRTK_ControllerEvents {
         if (buttonPush[1] != buttonPush_previous[1]) {
             if (buttonPush[1]) {
                 //ButtonTwo Pressed
-                Debug.Log("Button Two pressed");
+                Debug.Log("Button Two pressed" + PlayerManager.instance.globalTime);
                 OnButtonTwoPressed(SetControllerEvent(ref buttonTwoPressed, true, 1f));
                 EmitAlias(ButtonAlias.ButtonTwoPress, true, 1f, ref buttonTwoPressed);
             } else {
                 //ButtonTwo Released
-                Debug.Log("Button Two released");
+                Debug.Log("Button Two released" + PlayerManager.instance.globalTime);
                 OnButtonTwoReleased(SetControllerEvent(ref buttonTwoPressed, false, 0f));
                 EmitAlias(ButtonAlias.ButtonTwoPress, false, 0f, ref buttonTwoPressed);
             }
@@ -81,12 +81,12 @@ public class ControllerEventsExtension : VRTK_ControllerEvents {
         if (buttonPush[2] != buttonPush_previous[2]) {
             if (buttonPush[2]) {
                 //Trigger Pressed
-                Debug.Log("Trigger pressed");
+                Debug.Log("Trigger pressed" + PlayerManager.instance.globalTime);
                 OnTriggerPressed(SetControllerEvent(ref triggerPressed, true, 0.0f));
                 EmitAlias(ButtonAlias.TriggerPress, true, 0.0f, ref triggerPressed);
             } else {
                 // Trigger Pressed end
-                Debug.Log("Trigger released");
+                Debug.Log("Trigger released" + PlayerManager.instance.globalTime);
                 OnTriggerReleased(SetControllerEvent(ref triggerPressed, false, 0f));
                 EmitAlias(ButtonAlias.TriggerPress, false, 0f, ref triggerPressed);
             }
@@ -95,12 +95,12 @@ public class ControllerEventsExtension : VRTK_ControllerEvents {
         if (buttonPush[3] != buttonPush_previous[3]) {
             if (buttonPush[3]) {
                 //Grip Pressed
-                Debug.Log("Grip pressed");
+                Debug.Log("Grip pressed" + PlayerManager.instance.globalTime);
                 OnGripPressed(SetControllerEvent(ref gripPressed, true, 0.0f));
                 EmitAlias(ButtonAlias.GripPress, true, 0.0f, ref gripPressed);
             } else {
                 //Grip Pressed End
-                Debug.Log("Grip released");
+                Debug.Log("Grip released" + PlayerManager.instance.globalTime);
                 OnGripReleased(SetControllerEvent(ref gripPressed, false, 0f));
                 EmitAlias(ButtonAlias.GripPress, false, 0f, ref gripPressed);
             }
@@ -109,12 +109,12 @@ public class ControllerEventsExtension : VRTK_ControllerEvents {
         if (buttonPush[4] != buttonPush_previous[4]) {
             if (buttonPush[4]) {
                 //Touchpad Pressed
-                Debug.Log("Thumbstick pressed");
+                Debug.Log("Thumbstick pressed" + PlayerManager.instance.globalTime);
                 OnTouchpadPressed(SetControllerEvent(ref touchpadPressed, true, 1f));
                 EmitAlias(ButtonAlias.TouchpadPress, true, 1f, ref touchpadPressed);
             } else {
                 //Touchpad Released
-                Debug.Log("Thumbstick released");
+                Debug.Log("Thumbstick released" + PlayerManager.instance.globalTime);
                 OnTouchpadReleased(SetControllerEvent(ref touchpadPressed, false, 0f));
                 EmitAlias(ButtonAlias.TouchpadPress, false, 0f, ref touchpadPressed);
             }
