@@ -37,6 +37,10 @@ public class PlayerManager : MonoBehaviour {
 
     private void Update() {
         if (globalTime < 60.0f) {
+
+            if(gameTurn == 1) {
+                globalTime = 0.0f;
+            }
             connectionManager.CheckForIncomingData();
 
             accumulatedTime += Time.deltaTime;
