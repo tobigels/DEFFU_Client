@@ -12,6 +12,8 @@ public class ControllerEventsExtension : VRTK_ControllerEvents {
     private bool[] buttonPush_previous = new bool[5];
     private bool[] buttonTouch_previous = new bool[5];
 
+    private string gameturns = "";
+
 
     #endregion
 
@@ -20,7 +22,9 @@ public class ControllerEventsExtension : VRTK_ControllerEvents {
     // --------------------------------------- Private methods ---------------------------------------
     
     private void TestHelper(string name) {
-        Debug.Log(name + PlayerManager.instance.globalTime + " I " + PlayerManager.instance.GameTurn + " I " + gameObject.name);
+        //Debug.Log(name + PlayerManager.instance.globalTime + " I " + PlayerManager.instance.GameTurn + " I " + gameObject.name);
+        gameturns += " I " + PlayerManager.instance.GameTurn;
+        Debug.Log(gameturns);
     }
         
     // --------------------------------------- Public methods ---------------------------------------

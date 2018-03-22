@@ -33,7 +33,7 @@ public class AvatarConnector {
         }
 
         if (leftControllerEE != null) {
-            leftControllerEE.FireButtonEvents(buttonPushStatus, buttonTouchStatus, true);
+            leftControllerEE.FireButtonEvents(buttonPushStatus, buttonTouchStatus, false);
         }
 
         //reset boolstatusset, for next gameturn-iteration 
