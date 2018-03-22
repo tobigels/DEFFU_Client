@@ -36,7 +36,7 @@ public class PlayerManager : MonoBehaviour {
     // --------------------------------------- Private methods ---------------------------------------
 
     private void Update() {
-        if (globalTime < 60.0f) {
+        //if (globalTime < 60.0f) {
 
             if(gameTurn == 1) {
                 globalTime = 0.0f;
@@ -58,7 +58,8 @@ public class PlayerManager : MonoBehaviour {
                 accumulatedTime -= frame_length;
                 frameNumber++;
             }
-        }
+
+    //}
     }
 
     private void Awake() {
