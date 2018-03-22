@@ -17,7 +17,7 @@ public class PlayerManager : MonoBehaviour {
     private float accumulatedTime;
     private bool inputFramesSwitch;
     private float frame_length;
-
+    private bool gameStarted;
     public int frameCount = 5;
     public float gameTurn_length = 0.1f;
 
@@ -82,6 +82,7 @@ public class PlayerManager : MonoBehaviour {
         accumulatedTime = 0f;
         inputFramesSwitch = false;
         frame_length = gameTurn_length / frameCount;
+        gameStarted = false;
 
         DontDestroyOnLoad(gameObject);
     }
@@ -115,7 +116,7 @@ public class PlayerManager : MonoBehaviour {
     private void CheckDistantAvatar(Player player) {
 
         if(avatarConnectors_in[player.Id - 1] == null) {
-            avatarConnectors_in[player.Id - 1] = new AvatarConnector_IN(player.Name);
+            avatarConnectors_in[player.Id - 1] = new AvatarConnector_IN(player.Name, player.Id);
         }
 
         if(inputFramesSwitch) {
@@ -241,8 +242,9 @@ public class PlayerManager : MonoBehaviour {
     /// 
     /// </summary>
     public void GameTurnEvent() {
-        if(gameTurn == 0) {
+        if(!gameStarted) {
             SceneManager.LoadScene("Main");
+            gameStarted = true;
         }
 
         //Reset InputFrame-Buffers

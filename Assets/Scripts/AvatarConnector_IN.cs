@@ -33,11 +33,11 @@ public class AvatarConnector_IN : AvatarConnector {
 
     }
 
-    public AvatarConnector_IN(string givenName) {
+    public AvatarConnector_IN(string givenName, int id) {
 
         avatarFactory = new AvatarFactory();
 
-        playerName = givenName;
+        playerName = givenName +" | " + id.ToString();
 
         GameObject player = new GameObject();
         player.name = playerName;
