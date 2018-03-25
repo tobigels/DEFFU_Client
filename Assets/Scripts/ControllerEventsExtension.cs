@@ -6,7 +6,6 @@ public class ControllerEventsExtension : VRTK_ControllerEvents {
 
     #region FIELDS
 
-    private AvatarConnector_IN avatarConnector;
     private bool[] buttonPush = new bool[5];
     private bool[] buttonTouch = new bool[5];
     private bool[] buttonPush_previous = new bool[5];
@@ -23,19 +22,12 @@ public class ControllerEventsExtension : VRTK_ControllerEvents {
     
     private void TestHelper(string name) {
         //Debug.Log(name + PlayerManager.instance.globalTime + " I " + PlayerManager.instance.GameTurn + " I " + gameObject.name);
-        gameturns += " I " + PlayerManager.instance.GameTurn;
-        Debug.Log(gameturns);
+        //gameturns += " I " + PlayerManager.instance.GameTurn;
+        //Debug.Log(gameturns);
     }
         
     // --------------------------------------- Public methods ---------------------------------------
 
-    public AvatarConnector_IN AvatarConnector {
-        get {
-            return avatarConnector; }
-        set {
-            avatarConnector = value;
-        }
-    }
 
     public void FireButtonEvents(bool[] buttonPushStatus, bool[] buttonTouchStatus, bool isRight) {
 

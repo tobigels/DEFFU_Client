@@ -8,8 +8,8 @@ public class AvatarConnector_OUT : AvatarConnector {
     #region FIELDS
 
     private Transform headsetTransform;
-    private Transform leftController;
-    private Transform rightController;
+    private Transform leftControllerTransform;
+    private Transform rightControllerTransform;
 
     private SteamVR_TrackedObject leftController_tracked;
     private SteamVR_TrackedObject rightController_tracked;
@@ -26,31 +26,38 @@ public class AvatarConnector_OUT : AvatarConnector {
     // --------------------------------------- Private methods ---------------------------------------
 
     private void CheckLeft() {
-        leftController = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.LeftController);
+        leftControllerTransform = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.LeftController);
 
-        if(leftController.gameObject.GetComponent<VRTK_ControllerEvents>()) {
-            UnityEngine.Object.DestroyObject(leftController.gameObject.GetComponent<VRTK_ControllerEvents>());
+        if(leftControllerTransform.gameObject.GetComponent<VRTK_ControllerEvents>()) {
+            UnityEngine.Object.DestroyObject(leftControllerTransform.gameObject.GetComponent<VRTK_ControllerEvents>());
         }
 
-        leftControllerEE = leftController.gameObject.AddComponent<ControllerEventsExtension>();
     }
 
     private void CheckRight() {
-        rightController = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.RightController);
+        rightControllerTransform = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.RightController);
 
-        if (rightController.gameObject.GetComponent<VRTK_ControllerEvents>()) {
-            UnityEngine.Object.DestroyObject(rightController.gameObject.GetComponent<VRTK_ControllerEvents>());
+        if (rightControllerTransform.gameObject.GetComponent<VRTK_ControllerEvents>()) {
+            UnityEngine.Object.DestroyObject(rightControllerTransform.gameObject.GetComponent<VRTK_ControllerEvents>());
         }
 
-        rightControllerEE = rightController.gameObject.AddComponent<ControllerEventsExtension>();
     }
 
     // --------------------------------------- Public methods ---------------------------------------
 
-    public AvatarConnector_OUT() {
+    public AvatarConnector_OUT(string givenName, int id) {
         headsetTransform = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.Headset);
         CheckLeft();
         CheckRight();
+
+        InitializeComponents(givenName, id);
+
+        foreach(MeshRenderer mr in hmd.GetComponentsInChildren<MeshRenderer>()) {
+            mr.enabled = false;
+        }
+
+        leftController.GetComponent<MeshRenderer>().enabled = false;
+        rightController.GetComponent<MeshRenderer>().enabled = false;
 
         newestInputFrame = new InputFrame();
     }
@@ -69,11 +76,11 @@ public class AvatarConnector_OUT : AvatarConnector {
             headsetTransform = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.Headset);
         }
 
-        if (leftController != null) {
-            newestInputFrame.controller_left_pos = leftController.position;
-            newestInputFrame.controller_left_rot = leftController.rotation;
+        if (leftControllerTransform != null) {
+            newestInputFrame.controller_left_pos = leftControllerTransform.position;
+            newestInputFrame.controller_left_rot = leftControllerTransform.rotation;
 
-            leftController_tracked = leftController.GetComponentInParent<SteamVR_TrackedObject>();
+            leftController_tracked = leftControllerTransform.GetComponentInParent<SteamVR_TrackedObject>();
 
             if (leftController_tracked != null) {
                 leftController_device = SteamVR_Controller.Input((int)leftController_tracked.index);
@@ -97,11 +104,11 @@ public class AvatarConnector_OUT : AvatarConnector {
             CheckLeft();
         }
 
-        if (rightController != null) {
-            newestInputFrame.controller_right_pos = rightController.position;
-            newestInputFrame.controller_right_rot = rightController.rotation;
+        if (rightControllerTransform != null) {
+            newestInputFrame.controller_right_pos = rightControllerTransform.position;
+            newestInputFrame.controller_right_rot = rightControllerTransform.rotation;
 
-            rightController_tracked = rightController.GetComponentInParent<SteamVR_TrackedObject>();
+            rightController_tracked = rightControllerTransform.GetComponentInParent<SteamVR_TrackedObject>();
 
             if(rightController_tracked != null) {
                 rightController_device = SteamVR_Controller.Input((int)rightController_tracked.index);

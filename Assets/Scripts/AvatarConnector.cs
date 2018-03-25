@@ -14,6 +14,13 @@ public enum ButtonType {
 }
 
 public class AvatarConnector {
+
+    protected AvatarFactory avatarFactory;
+
+    protected GameObject leftController;
+    protected GameObject rightController;
+    protected GameObject hmd;
+
     protected ControllerEventsExtension rightControllerEE;
     protected ControllerEventsExtension leftControllerEE;
 
@@ -68,6 +75,62 @@ public class AvatarConnector {
             }
         }
     }
+
+    /// <summary>
+    /// update buttonstatus for each controller in correponding ControllerEventsExtension
+    /// </summary>
+    /// <param name="inputFrame"></param>
+    public void UpdateDistantAvatarMovement(InputFrame inputFrame) {
+
+        hmd.transform.position = inputFrame.hmd_pos;
+        hmd.transform.rotation = inputFrame.hmd_rot;
+
+        rightController.transform.position = inputFrame.controller_right_pos;
+        rightController.transform.rotation = inputFrame.controller_right_rot * Quaternion.Euler(39.4f, 0, 0);
+
+        leftController.transform.position = inputFrame.controller_left_pos;
+        leftController.transform.rotation = inputFrame.controller_left_rot * Quaternion.Euler(39.4f, 0, 0);
+    }
+
+    public void InitializeComponents(string givenName, int id) {
+
+        avatarFactory = new AvatarFactory();
+
+        GameObject player = new GameObject();
+        player.name = givenName + " | " + id.ToString();
+
+        //hmd = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        if (PlayerManager.instance.avatar_hmd != null) {
+            hmd = avatarFactory.InstantiateObject(PlayerManager.instance.avatar_hmd);
+            hmd.name = "hmd";
+            hmd.transform.parent = player.transform;
+        } else {
+            Debug.Log("Error: HMD-Prefab is empty");
+        }
+
+        //leftController = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        if (PlayerManager.instance.avatar_leftController != null) {
+            leftController = avatarFactory.InstantiateObject(PlayerManager.instance.avatar_leftController);
+            leftController.name = "leftController";
+            leftController.transform.parent = player.transform;
+
+            leftControllerEE = leftController.AddComponent<ControllerEventsExtension>();
+        } else {
+            Debug.Log("Error: leftController-Prefab is empty");
+        }
+
+        //rightController = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        if (PlayerManager.instance.avatar_rightController != null) {
+            rightController = avatarFactory.InstantiateObject(PlayerManager.instance.avatar_rightController);
+            rightController.name = "rightController";
+            rightController.transform.parent = player.transform;
+
+            rightControllerEE = rightController.AddComponent<ControllerEventsExtension>();
+
+        } else {
+            Debug.Log("Error: rightController-Prefab is empty");
+        }
+    }
 }
 
 public class AvatarFactory : MonoBehaviour {
@@ -76,8 +139,8 @@ public class AvatarFactory : MonoBehaviour {
         return Instantiate(prefab);
     }
 
-    public void DestroyObject(GameObject go) {
-        Destroy(go);
+    public void DestroyObject(Transform go) {
+        Destroy(go.gameObject);
     }
 
 }

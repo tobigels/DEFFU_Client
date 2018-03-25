@@ -95,7 +95,7 @@ public class PlayerManager : MonoBehaviour {
 
         
         if (avatarConnector_OUT == null) {
-            avatarConnector_OUT = new AvatarConnector_OUT();
+            avatarConnector_OUT = new AvatarConnector_OUT(localPlayer.Name, localPlayer.Id);
         }
 
         InputFrame inputFrame = avatarConnector_OUT.getInput();
@@ -103,8 +103,10 @@ public class PlayerManager : MonoBehaviour {
 
         if(inputFramesSwitch) {
             localPlayer.InputFrames_alpha[frameNumber] = inputFrame;
+            avatarConnector_OUT.UpdateDistantAvatarMovement(localPlayer.InputFrames_beta[frameNumber]);
         } else {
             localPlayer.InputFrames_beta[frameNumber] = inputFrame;
+            avatarConnector_OUT.UpdateDistantAvatarMovement(localPlayer.InputFrames_alpha[frameNumber]);
         }
 
         connectionManager.SendData(inputFrame);
@@ -276,15 +278,6 @@ public class PlayerManager : MonoBehaviour {
         inputFramesSwitch = !inputFramesSwitch;
         frameNumber = 0;
 
-        /*
-        foreach (Player player in AllPlayers) {
-            if (player.Id != 0 && player.Id != localPlayer.Id) {
-
-                Array.Clear(player.LastInputFrames, 0, player.LastInputFrames.Length);
-                player.NewestInputFrames.CopyTo(player.LastInputFrames, 0);
-                Array.Clear(player.NewestInputFrames, 0, player.NewestInputFrames.Length);
-            }
-        }*/
     }
 
     /// <summary>
