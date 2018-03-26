@@ -20,7 +20,7 @@ public class LobbyInterface : MonoBehaviour {
     // --------------------------------------- Private methods ---------------------------------------
 
     /// <summary>
-    /// 
+    /// setup reference to PlayerManager-instance
     /// </summary>
     private void Start() {
         playerManager = PlayerManager.instance;
@@ -29,7 +29,7 @@ public class LobbyInterface : MonoBehaviour {
     }
 
     /// <summary>
-    /// 
+    /// check player count every update
     /// </summary>
     private void Update() {
         for (int i = 0; i < playerManager.ConnectionManager.MAX_CONNECTIONS; i++) {
@@ -40,7 +40,7 @@ public class LobbyInterface : MonoBehaviour {
     // --------------------------------------- Public methods ---------------------------------------
 
     /// <summary>
-    /// 
+    /// startGame
     /// </summary>
     public void StartSession() {
         playerManager.StartGame();

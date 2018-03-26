@@ -35,6 +35,9 @@ public class PlayerManager : MonoBehaviour {
 
     // --------------------------------------- Private methods ---------------------------------------
 
+    /// <summary>
+    /// check for incoming data and process Inputframes
+    /// </summary>
     private void Update() {
         //if (globalTime < 60.0f) {
 
@@ -47,7 +50,6 @@ public class PlayerManager : MonoBehaviour {
             globalTime += Time.deltaTime;
 
             if (accumulatedTime > frame_length && frameNumber < frameCount) {
-                //Debug.Log(frameNumber);
                 CheckLocalAvatar();
 
                 foreach (Player player in allPlayers) {
@@ -89,7 +91,7 @@ public class PlayerManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// 
+    /// buffer inputFrames from local user
     /// </summary>
     private void CheckLocalAvatar() {
 
@@ -113,7 +115,7 @@ public class PlayerManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// 
+    /// buffer inputFrames, which have been sent
     /// </summary>
     /// <param name="player"></param>
     private void CheckDistantAvatar(Player player) {
@@ -169,7 +171,7 @@ public class PlayerManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// 
+    /// process incoming DATA-Message
     /// </summary>
     /// <param name="id"></param>
     /// <param name="input"></param>
@@ -216,7 +218,7 @@ public class PlayerManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// 
+    /// process NEWCLIENT-Event
     /// </summary>
     /// <param name="id"></param>
     /// <param name="name"></param>
@@ -230,7 +232,7 @@ public class PlayerManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// 
+    /// process DISCONNECT-Event
     /// </summary>
     /// <param name="id"></param>
     public void DisconnectEvent(int id) {
@@ -242,7 +244,7 @@ public class PlayerManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// 
+    /// incoming Lockstep
     /// </summary>
     public void GameTurnEvent() {
         if(!gameStarted) {
@@ -281,7 +283,7 @@ public class PlayerManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// 
+    /// initialize local player and connect to server
     /// </summary>
     /// <param name="name"></param>
     public void InitializeLocalPlayer(string name, string ipAddress) {
@@ -292,7 +294,7 @@ public class PlayerManager : MonoBehaviour {
     }
 
     /// <summary>
-    /// 
+    /// send ASKGAMESTART
     /// </summary>
     public void StartGame() {
         connectionManager.SendGameStart(gameTurn_length);

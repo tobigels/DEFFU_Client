@@ -25,6 +25,9 @@ public class AvatarConnector_OUT : AvatarConnector {
 
     // --------------------------------------- Private methods ---------------------------------------
 
+    /// <summary>
+    /// setup connection with local left controller
+    /// </summary>
     private void CheckLeft() {
         leftControllerTransform = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.LeftController);
 
@@ -34,6 +37,9 @@ public class AvatarConnector_OUT : AvatarConnector {
 
     }
 
+    /// <summary>
+    /// setup connection with local right controller
+    /// </summary>
     private void CheckRight() {
         rightControllerTransform = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.RightController);
 
@@ -45,6 +51,11 @@ public class AvatarConnector_OUT : AvatarConnector {
 
     // --------------------------------------- Public methods ---------------------------------------
 
+    /// <summary>
+    /// setup connection to device components
+    /// </summary>
+    /// <param name="givenName"></param>
+    /// <param name="id"></param>
     public AvatarConnector_OUT(string givenName, int id) {
         headsetTransform = VRTK_DeviceFinder.DeviceTransform(VRTK_DeviceFinder.Devices.Headset);
         CheckLeft();
@@ -63,11 +74,10 @@ public class AvatarConnector_OUT : AvatarConnector {
     }
 
     /// <summary>
-    /// 
+    /// return actual state of local devices
     /// </summary>
     /// <returns></returns>
     public InputFrame getInput() {
-
 
         if (headsetTransform != null) {
             newestInputFrame.hmd_pos = headsetTransform.position;

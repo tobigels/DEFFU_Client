@@ -32,7 +32,7 @@ public class SerializationUnit {
     }
 
     /// <summary>
-    /// 
+    /// Serialize generic object
     /// </summary>
     /// <param name="toSerialize"></param>
     /// <returns></returns>
@@ -54,7 +54,7 @@ public class SerializationUnit {
     }
 
     /// <summary>
-    /// 
+    /// Deserialize generic object
     /// </summary>
     /// <param name="buffer"></param>
     /// <param name="bufferLength"></param>

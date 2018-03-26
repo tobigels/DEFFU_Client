@@ -19,7 +19,7 @@ public class LoginInterface : MonoBehaviour {
     // --------------------------------------- Private methods ---------------------------------------
 
     /// <summary>
-    /// 
+    /// check if inputFields are set
     /// </summary>
     /// <returns></returns>
     private bool CheckInputFields() {
@@ -39,9 +39,6 @@ public class LoginInterface : MonoBehaviour {
         return true;
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     private void Start() {
         playerManager = PlayerManager.instance;
     }
@@ -49,7 +46,7 @@ public class LoginInterface : MonoBehaviour {
     // --------------------------------------- Public methods ---------------------------------------
 
     /// <summary>
-    /// 
+    /// connect to server
     /// </summary>
     public void Connect() {
         if(CheckInputFields() && playerManager != null) {

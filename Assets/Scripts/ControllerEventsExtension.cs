@@ -28,7 +28,7 @@ public class ControllerEventsExtension : VRTK_ControllerEvents {
         
     // --------------------------------------- Public methods ---------------------------------------
 
-
+    //Fire Button events to vrtk-components
     public void FireButtonEvents(bool[] buttonPushStatus, bool[] buttonTouchStatus, bool isRight) {
 
         //Extract buttonStatus for either left or right controller 

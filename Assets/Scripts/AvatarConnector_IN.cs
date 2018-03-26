@@ -17,18 +17,15 @@ public class AvatarConnector_IN : AvatarConnector {
 
 
     public AvatarConnector_IN(string givenName, int id) {
-
         InitializeComponents(givenName, id);
     }
 
     
 
     /// <summary>
-    /// 
+    /// Delete component, if distant player has left
     /// </summary>
     public void DestroyGameObjects() {
-        //avatarFactory.DestroyObject(leftController);
-        //avatarFactory.DestroyObject(rightController);
         avatarFactory.DestroyObject(hmd.transform.parent);
     }
 

@@ -15,6 +15,8 @@ public enum ButtonType {
 
 public class AvatarConnector {
 
+    #region FIELDS
+
     protected AvatarFactory avatarFactory;
 
     protected GameObject leftController;
@@ -29,6 +31,10 @@ public class AvatarConnector {
 
     protected bool[] buttonPushSetStatus = new bool[10];
     protected bool[] buttonTouchSetStatus = new bool[10];
+
+    #endregion
+
+    #region METHODS
 
     /// <summary>
     /// Fire ButtonEvents for each controller in corresponding ControllerEventsExtension
@@ -54,7 +60,7 @@ public class AvatarConnector {
     }
 
     /// <summary>
-    /// 
+    /// Update saved status with given inputFrame
     /// </summary>
     /// <param name="inputFrame"></param>
     public void UpdateDistantAvatarButtonEvents(InputFrame inputFrame) {
@@ -92,6 +98,12 @@ public class AvatarConnector {
         leftController.transform.rotation = inputFrame.controller_left_rot * Quaternion.Euler(39.4f, 0, 0);
     }
 
+
+    /// <summary>
+    /// Instantiate components for each device part
+    /// </summary>
+    /// <param name="givenName"></param>
+    /// <param name="id"></param>
     public void InitializeComponents(string givenName, int id) {
 
         avatarFactory = new AvatarFactory();
@@ -131,6 +143,9 @@ public class AvatarConnector {
             Debug.Log("Error: rightController-Prefab is empty");
         }
     }
+
+    #endregion
+
 }
 
 public class AvatarFactory : MonoBehaviour {

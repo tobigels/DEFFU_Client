@@ -47,7 +47,7 @@ public class ConnectionManager {
     // --------------------------------------- Private methods ---------------------------------------
 
     /// <summary>
-    /// 
+    /// process incoming message
     /// </summary>
     /// <param name="recHostId"></param>
     /// <param name="m"></param>
@@ -86,7 +86,7 @@ public class ConnectionManager {
     }
 
     /// <summary>
-    /// 
+    /// send message
     /// </summary>
     /// <param name="m"></param>
     /// <param name="reliable"></param>
@@ -94,9 +94,6 @@ public class ConnectionManager {
         byte error;
         byte[] recBuffer = new byte[1024];
         int bufferSize = 1024;
-        /*if(m.Content != null) {
-            Debug.Log("Length of sent Data " + m.Content.Length);
-        } */   
 
         recBuffer = serializationUnit.SerializeHelper(m);
 
@@ -110,7 +107,7 @@ public class ConnectionManager {
     // --------------------------------------- Public methods ---------------------------------------
 
     /// <summary>
-    /// 
+    /// setup components
     /// </summary>
     /// <param name="pm"></param>
     public ConnectionManager(PlayerManager pm) {
@@ -122,7 +119,7 @@ public class ConnectionManager {
     }
 
     /// <summary>
-    /// 
+    /// connect to server
     /// </summary>
     /// <param name="ipAddress"></param>
     public void Connect(string ipAddress) {
@@ -147,7 +144,7 @@ public class ConnectionManager {
     }
 
     /// <summary>
-    /// 
+    /// check if any messages have been received
     /// </summary>
     public void CheckForIncomingData() {
 
@@ -179,10 +176,6 @@ public class ConnectionManager {
         } 
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="name"></param>
     public void SendNameResponse(string name) {
         Message m = new Message();
         m.Content = serializationUnit.SerializeHelper(name);
@@ -190,10 +183,6 @@ public class ConnectionManager {
         SendMessage(m, true);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="input"></param>
     public void SendData(InputFrame input) {
         Message m = new Message();
         m.Content = serializationUnit.SerializeHelper(input);
@@ -201,9 +190,6 @@ public class ConnectionManager {
         SendMessage(m, false);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
     public void SendGameStart(float gameTurn_length) {
         Message m = new Message();
         m.Content = serializationUnit.SerializeHelper(gameTurn_length);
